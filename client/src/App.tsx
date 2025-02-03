@@ -14,16 +14,12 @@ function App() {
       children: [
         { path: "/", element: <HomePage /> },
         { path: "/blog/:blogID", element: <BlogArticle /> },
-        { path: "/blog/create", element: <CreateBlogForm /> },
+        { path: "/create-blog", element: <CreateBlogForm /> },
       ],
     },
   ]);
 
-  return (
-    <VStack>
-      <RouterProvider router={router} />
-    </VStack>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
