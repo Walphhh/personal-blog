@@ -1,18 +1,20 @@
+import Navbar from "@/components/Navbar";
+import { Box } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
 
 const Layout = () => {
   return (
-    <div>
+    <Box>
       <nav>
-        <h1>Navbar Here</h1>
+        <Navbar />
       </nav>
 
-      <main>
-        <Outlet /> {/* Child routes render here */}
-      </main>
+      <Box mt={10}>
+        <Outlet />
+      </Box>
 
       <footer>{/* Footer content */}</footer>
-    </div>
+    </Box>
   );
 };
 

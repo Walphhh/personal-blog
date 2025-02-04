@@ -5,6 +5,8 @@ import Layout from "./pages/Layout";
 import "./App.css";
 import { VStack } from "@chakra-ui/react";
 import CreateBlogForm from "./components/CreateBlogForm";
+import { ReactNode } from "react";
+import ProtectedRoutes from "./components/ProtectedRoutes";
 
 function App() {
   const router = createBrowserRouter([
@@ -14,7 +16,14 @@ function App() {
       children: [
         { path: "/", element: <HomePage /> },
         { path: "/blog/:blogID", element: <BlogArticle /> },
-        { path: "/create-blog", element: <CreateBlogForm /> },
+        {
+          path: "/create-blog",
+          element: (
+            <ProtectedRoutes>
+              <CreateBlogForm />
+            </ProtectedRoutes>
+          ),
+        },
       ],
     },
   ]);

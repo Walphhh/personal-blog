@@ -9,6 +9,7 @@ app.use(express.json());
 app.use(cors());
 app.use("/api", routes);
 
+// Always add IP and PORT
 const DB = "mongodb://127.0.0.1:27017/personal-blog";
 
 mongoose
