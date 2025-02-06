@@ -6,6 +6,7 @@ import "./App.css";
 import CreateBlogForm from "./components/CreateBlogForm";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import { AlertProvider } from "./contexts/AlertContext";
+import { Toaster } from "./components/ui/toaster";
 
 function App() {
   const router = createBrowserRouter([
@@ -29,6 +30,7 @@ function App() {
 
   return (
     <AlertProvider>
+      <Toaster />
       <RouterProvider router={router} />
     </AlertProvider>
   );

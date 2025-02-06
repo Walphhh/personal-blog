@@ -9,7 +9,7 @@ const BlogArticle = () => {
   const Navigate = useNavigate();
   const { blogID } = useParams();
   const [blog, setBlog] = useState<Blog | undefined>(undefined);
-  const { setAlert } = useAlert();
+  const { showAlert, setAlert } = useAlert();
 
   useEffect(() => {
     const fetchBlogArticle = async () => {
@@ -28,7 +28,7 @@ const BlogArticle = () => {
   const deleteBlog = async () => {
     try {
       await axios.delete(`http://localhost:5000/api/blogs/${blogID}`);
-      setAlert(true, "success", "Blog Deleted");
+      setAlert(!showAlert, "success", "Blog Deleted");
       Navigate("/");
     } catch (err) {
       console.log(err);

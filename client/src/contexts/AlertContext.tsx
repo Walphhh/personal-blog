@@ -1,4 +1,4 @@
-import { Alert } from "@chakra-ui/react";
+import { Alert, Box, Button } from "@chakra-ui/react";
 import {
   useEffect,
   ReactNode,
@@ -6,6 +6,7 @@ import {
   useContext,
   useState,
 } from "react";
+import { toaster } from "@/components/ui/toaster";
 
 type AlertStatus = "success" | "error";
 type AlertMessage = "Blog Deleted" | "Blog Created";
@@ -34,7 +35,7 @@ const AlertContext = createContext<AlertContextType>({
 export const AlertProvider = ({ children }: { children: ReactNode }) => {
   // Default Declaration for values
   const [alertState, setAlertState] = useState({
-    showAlert: false,
+    showAlert: true,
     status: "success" as AlertStatus,
     message: "Blog Created" as AlertMessage,
   });
@@ -49,14 +50,27 @@ export const AlertProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // Shows and closes an Alert for when a blog is created/deleted
+
+  const toastDuration = 3000;
+  const showToast = () => {
+    toaster.create({
+      title: alertState.message,
+      type: "success",
+      duration: toastDuration,
+    });
+    console.log(alertState.status, alertState.message);
+  };
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setAlertState((prev) => ({ ...prev, showAlert: false }));
-    }, 5000);
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [alertState.showAlert]);
+    if (alertState.showAlert) {
+      showToast();
+
+      const timer = setTimeout(() => {
+        setAlertState((prev) => ({ ...prev, showAlert: false }));
+      }, toastDuration);
+
+      return () => clearTimeout(timer);
+    }
+  });
 
   return (
     <AlertContext.Provider
@@ -67,12 +81,6 @@ export const AlertProvider = ({ children }: { children: ReactNode }) => {
         setAlert,
       }}
     >
-      {alertState.showAlert && (
-        <Alert.Root status={alertState.status}>
-          <Alert.Indicator />
-          <Alert.Title>{alertState.message}</Alert.Title>
-        </Alert.Root>
-      )}
       {children}
     </AlertContext.Provider>
   );
