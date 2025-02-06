@@ -63,12 +63,7 @@ export const AlertProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (alertState.showAlert) {
       showToast();
-
-      const timer = setTimeout(() => {
-        setAlertState((prev) => ({ ...prev, showAlert: false }));
-      }, toastDuration);
-
-      return () => clearTimeout(timer);
+      setAlertState((prev) => ({ ...prev, showAlert: false }));
     }
   });
 
