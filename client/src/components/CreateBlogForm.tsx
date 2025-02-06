@@ -1,11 +1,16 @@
-import { Button, Fieldset, Input, Textarea, Box } from "@chakra-ui/react";
+import { Button, Input, Textarea, Box } from "@chakra-ui/react";
 import { Field } from "./ui/field";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useAlert } from "@/contexts/AlertContext";
 
+// The Form uses Formik to handle form submission and Yup for schema validation
 const CreateBlogForm = () => {
+  const Navigate = useNavigate();
+  const { setAlert } = useAlert();
+
   // Schema for validation
   const schema = Yup.object().shape({
     title: Yup.string()
@@ -32,6 +37,8 @@ const CreateBlogForm = () => {
           values
         );
         console.log(response.data);
+        setAlert(true, "success", "Blog Created");
+        Navigate("/");
       } catch (err) {
         console.log(err);
       }

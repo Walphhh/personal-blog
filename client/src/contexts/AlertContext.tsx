@@ -1,14 +1,25 @@
-import { Alert, AlertContent } from "@chakra-ui/react";
-import React, { ReactNode, createContext, useContext, useState } from "react";
+import { Alert } from "@chakra-ui/react";
+import {
+  useEffect,
+  ReactNode,
+  createContext,
+  useContext,
+  useState,
+} from "react";
 
+type AlertStatus = "success" | "error";
+type AlertMessage = "Blog Deleted" | "Blog Created";
+
+// Shape of the Context
+// Basically everything that you can access within the provider
 type AlertContextType = {
-  status: "success" | "error";
-  message: "Blog Deleted" | "Blog Created";
+  status: AlertStatus;
+  message: AlertMessage;
   showAlert: boolean;
   setAlert: (
     showing: boolean,
-    status: AlertContextType["status"],
-    message: AlertContextType["message"]
+    status: AlertStatus,
+    message: AlertMessage
   ) => void;
 };
 
@@ -22,28 +33,44 @@ const AlertContext = createContext<AlertContextType>({
 
 export const AlertProvider = ({ children }: { children: ReactNode }) => {
   // Default Declaration for values
-  const [showAlert, setShowAlert] = useState(false);
-  const [status, setStatus] = useState<AlertContextType["status"]>("success");
-  const [message, setMessage] =
-    useState<AlertContextType["message"]>("Blog Created");
+  const [alertState, setAlertState] = useState({
+    showAlert: false,
+    status: "success" as AlertStatus,
+    message: "Blog Created" as AlertMessage,
+  });
 
-  // Method inside the  provider to set the states
+  // Method inside the provider to set the states
   const setAlert = (
     show: boolean,
-    newStatus: AlertContextType["status"],
-    newMessage: AlertContextType["message"]
+    newStatus: AlertStatus,
+    newMessage: AlertMessage
   ) => {
-    setShowAlert(show);
-    setStatus(newStatus);
-    setMessage(newMessage);
+    setAlertState({ showAlert: show, status: newStatus, message: newMessage });
   };
 
+  // Shows and closes an Alert for when a blog is created/deleted
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setAlertState((prev) => ({ ...prev, showAlert: false }));
+    }, 5000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [alertState.showAlert]);
+
   return (
-    <AlertContext.Provider value={{ showAlert, status, message, setAlert }}>
-      {showAlert && (
-        <Alert.Root status={status}>
+    <AlertContext.Provider
+      value={{
+        showAlert: alertState.showAlert,
+        status: alertState.status,
+        message: alertState.message,
+        setAlert,
+      }}
+    >
+      {alertState.showAlert && (
+        <Alert.Root status={alertState.status}>
           <Alert.Indicator />
-          <Alert.Title>{message}</Alert.Title>
+          <Alert.Title>{alertState.message}</Alert.Title>
         </Alert.Root>
       )}
       {children}

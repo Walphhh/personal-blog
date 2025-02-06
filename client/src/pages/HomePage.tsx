@@ -2,7 +2,6 @@ import BlogPreviewCard from "@/components/BlogPreviewCard";
 import { Heading, VStack, HStack, Box, Alert } from "@chakra-ui/react";
 import axios from "axios";
 import { useState, useEffect, useContext } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import { useAlert } from "../contexts/AlertContext";
 
 export interface Blog {
@@ -14,23 +13,9 @@ export interface Blog {
 
 const HomePage = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
-  const location = useLocation();
-  const { showAlert, setAlert } = useAlert();
+  // const { showAlert, closeAlert } = useAlert();
 
-  useEffect(() => {
-    if (showAlert) {
-      //Timer for how long the alert will show
-      const timer = setTimeout(() => {
-        setAlert(false, "error", "Blog Deleted");
-        console.log("Is alert showing: ", showAlert);
-      }, 5000);
-
-      return () => {
-        clearTimeout(timer);
-      };
-    }
-  }, [location]);
-
+  // Fetches all the blogs from the backend
   useEffect(() => {
     const fetchBlogs = async () => {
       try {

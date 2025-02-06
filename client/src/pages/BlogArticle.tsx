@@ -6,7 +6,7 @@ import axios from "axios";
 import { useAlert } from "../contexts/AlertContext";
 
 const BlogArticle = () => {
-  const navigate = useNavigate();
+  const Navigate = useNavigate();
   const { blogID } = useParams();
   const [blog, setBlog] = useState<Blog | undefined>(undefined);
   const { setAlert } = useAlert();
@@ -29,7 +29,7 @@ const BlogArticle = () => {
     try {
       await axios.delete(`http://localhost:5000/api/blogs/${blogID}`);
       setAlert(true, "success", "Blog Deleted");
-      navigate("/");
+      Navigate("/");
     } catch (err) {
       console.log(err);
     }
