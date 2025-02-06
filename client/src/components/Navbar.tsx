@@ -1,11 +1,12 @@
 import { Box, Flex, HStack, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+
 const Navbar = () => {
   const [isAdmin, setIsAdmin] = useState(true);
 
   return (
-    <Box>
+    <Box p={2} border="emphasized">
       <HStack justify="space-between">
         <HStack>
           <Text>Home</Text>

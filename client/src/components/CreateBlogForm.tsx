@@ -1,17 +1,12 @@
 import { Button, Fieldset, Input, Textarea, Box } from "@chakra-ui/react";
 import { Field } from "./ui/field";
-import Formik, { FormikProps, useFormik } from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Form } from "react-router-dom";
+
 import axios from "axios";
 
-interface BlogFormValues {
-  title: string;
-  description: string;
-  body: string;
-}
-
 const CreateBlogForm = () => {
+  // Schema for validation
   const schema = Yup.object().shape({
     title: Yup.string()
       .min(1, "Title is too short!")
@@ -75,21 +70,3 @@ const CreateBlogForm = () => {
 };
 
 export default CreateBlogForm;
-
-{
-  /* <Fieldset.Root>
-  <Fieldset.Legend>Enter Blog Post Below</Fieldset.Legend>
-  <Fieldset.Content>
-    <Field label="Title">
-      <Input name="title" />
-    </Field>
-    <Field label="Description">
-      <Input name="description" />
-    </Field>
-    <Field label="Body">
-      <Textarea name="body" />
-    </Field>
-  </Fieldset.Content>
-  <Button type="submit">Submit</Button>
-</Fieldset.Root> */
-}

@@ -1,15 +1,15 @@
 import { VStack, Heading, Text, Button } from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Blog } from "./HomePage";
 import axios from "axios";
+import { useAlert } from "../contexts/AlertContext";
 
 const BlogArticle = () => {
+  const navigate = useNavigate();
   const { blogID } = useParams();
-
-  console.log(blogID);
-
   const [blog, setBlog] = useState<Blog | undefined>(undefined);
+  const { setAlert } = useAlert();
 
   useEffect(() => {
     const fetchBlogArticle = async () => {
@@ -25,9 +25,11 @@ const BlogArticle = () => {
     fetchBlogArticle();
   }, [blogID]);
 
-  const deleteBlog = () => {
+  const deleteBlog = async () => {
     try {
-      axios.delete(`http://localhost:5000/api/blogs/${blogID}`);
+      await axios.delete(`http://localhost:5000/api/blogs/${blogID}`);
+      setAlert(true, "success", "Blog Deleted");
+      navigate("/");
     } catch (err) {
       console.log(err);
     }

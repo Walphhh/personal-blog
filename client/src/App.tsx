@@ -3,10 +3,9 @@ import HomePage from "./pages/HomePage";
 import BlogArticle from "./pages/BlogArticle";
 import Layout from "./pages/Layout";
 import "./App.css";
-import { VStack } from "@chakra-ui/react";
 import CreateBlogForm from "./components/CreateBlogForm";
-import { ReactNode } from "react";
 import ProtectedRoutes from "./components/ProtectedRoutes";
+import { AlertProvider } from "./contexts/AlertContext";
 
 function App() {
   const router = createBrowserRouter([
@@ -28,7 +27,11 @@ function App() {
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <AlertProvider>
+      <RouterProvider router={router} />
+    </AlertProvider>
+  );
 }
 
 export default App;
