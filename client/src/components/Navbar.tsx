@@ -9,7 +9,10 @@ const Navbar = () => {
     <Box p={2} border="emphasized">
       <HStack justify="space-between">
         <HStack>
-          <Text>Home</Text>
+          <Link to="/">
+            <Text>Home</Text>
+          </Link>
+
           <Text>About</Text>
         </HStack>
         <HStack display="flex" justifyContent="flex-end">

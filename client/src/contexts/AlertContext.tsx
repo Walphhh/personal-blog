@@ -35,7 +35,7 @@ const AlertContext = createContext<AlertContextType>({
 export const AlertProvider = ({ children }: { children: ReactNode }) => {
   // Default Declaration for values
   const [alertState, setAlertState] = useState({
-    showAlert: true,
+    showAlert: false,
     status: "success" as AlertStatus,
     message: "Blog Created" as AlertMessage,
   });
@@ -50,7 +50,6 @@ export const AlertProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // Shows and closes an Alert for when a blog is created/deleted
-
   const toastDuration = 3000;
   const showToast = () => {
     toaster.create({
@@ -60,6 +59,7 @@ export const AlertProvider = ({ children }: { children: ReactNode }) => {
     });
     console.log(alertState.status, alertState.message);
   };
+
   useEffect(() => {
     if (alertState.showAlert) {
       showToast();

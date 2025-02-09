@@ -1,15 +1,16 @@
-import { VStack, Heading, Text, Button } from "@chakra-ui/react";
+import { VStack, Heading, Text, Button, HStack } from "@chakra-ui/react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Blog } from "./HomePage";
 import axios from "axios";
 import { useAlert } from "../contexts/AlertContext";
+import ConfirmationDialog from "@/components/ConfirmationDialog";
 
 const BlogArticle = () => {
   const Navigate = useNavigate();
   const { blogID } = useParams();
   const [blog, setBlog] = useState<Blog | undefined>(undefined);
-  const { showAlert, setAlert } = useAlert();
+  const { setAlert } = useAlert();
 
   useEffect(() => {
     const fetchBlogArticle = async () => {
@@ -28,7 +29,7 @@ const BlogArticle = () => {
   const deleteBlog = async () => {
     try {
       await axios.delete(`http://localhost:5000/api/blogs/${blogID}`);
-      setAlert(!showAlert, "success", "Blog Deleted");
+      setAlert(true, "success", "Blog Deleted");
       Navigate("/");
     } catch (err) {
       console.log(err);
@@ -37,10 +38,21 @@ const BlogArticle = () => {
 
   return (
     <VStack>
-      <Heading>Blog {blog?.title}</Heading>
-      <Text>Blog {blog?.description}</Text>
-      <Text>Blog {blog?.body}</Text>
-      <Button onClick={deleteBlog}>Delete Blog</Button>
+      <Heading>{blog?.title}</Heading>
+      <Text>{blog?.description}</Text>
+      <Text>{blog?.body}</Text>
+      <HStack>
+        <ConfirmationDialog
+          type="edit"
+          buttonStyle="gray"
+          onConfirm={() => {}}
+        />
+        <ConfirmationDialog
+          type="delete"
+          buttonStyle="red"
+          onConfirm={deleteBlog}
+        />
+      </HStack>
     </VStack>
   );
 };

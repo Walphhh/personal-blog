@@ -2,6 +2,7 @@ import BlogPreviewCard from "@/components/BlogPreviewCard";
 import { Heading, VStack, HStack, Box, Alert } from "@chakra-ui/react";
 import axios from "axios";
 import { useState, useEffect, useContext } from "react";
+
 import { useAlert } from "../contexts/AlertContext";
 
 export interface Blog {
@@ -13,7 +14,6 @@ export interface Blog {
 
 const HomePage = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
-  // const { showAlert, closeAlert } = useAlert();
 
   // Fetches all the blogs from the backend
   useEffect(() => {
