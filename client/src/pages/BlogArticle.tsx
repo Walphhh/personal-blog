@@ -20,6 +20,15 @@ const BlogArticle = () => {
         );
         setBlog(response.data);
       } catch (err) {
+        if (axios.isAxiosError(err) && err.response?.status === 404) {
+          console.log("In Client: Blog Not Found");
+          setBlog({
+            _id: blogID as string,
+            title: "Blog Not Found",
+            description: "Blog Not Found",
+            body: "Blog Not Found",
+          });
+        }
         console.log(err);
       }
     };

@@ -43,7 +43,7 @@ const HomePage = () => {
   };
 
   return (
-    <VStack spaceY="10" mt={10}>
+    <VStack pt="10" spaceY="10">
       <VStack spaceY="2">{displayBlogs()}</VStack>
     </VStack>
   );

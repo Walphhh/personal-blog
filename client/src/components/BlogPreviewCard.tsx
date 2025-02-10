@@ -8,7 +8,7 @@ const BlogPreviewCard = ({
   description,
 }: Pick<Blog, "_id" | "title" | "description">) => {
   return (
-    <Card.Root w="1080px">
+    <Card.Root w="1080px" background="bg.panel">
       <Card.Body>
         <Card.Title>{title}</Card.Title>
         <Card.Description>{description}</Card.Description>

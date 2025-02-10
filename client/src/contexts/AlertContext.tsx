@@ -1,4 +1,3 @@
-import { Alert, Box, Button } from "@chakra-ui/react";
 import {
   useEffect,
   ReactNode,
@@ -9,7 +8,11 @@ import {
 import { toaster } from "@/components/ui/toaster";
 
 type AlertStatus = "success" | "error";
-type AlertMessage = "Blog Deleted" | "Blog Created";
+type AlertMessage =
+  | "Blog Deleted"
+  | "Blog Created"
+  | "Admin Logged In"
+  | "Admin Logged Out";
 
 // Shape of the Context
 // Basically everything that you can access within the provider

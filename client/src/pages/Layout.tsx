@@ -9,7 +9,7 @@ const Layout = () => {
         <Navbar />
       </nav>
 
-      <Box mt={10}>
+      <Box background="bg.muted">
         <Outlet />
       </Box>
 

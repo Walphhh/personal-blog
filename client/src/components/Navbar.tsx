@@ -1,22 +1,38 @@
-import { Box, Flex, HStack, Text } from "@chakra-ui/react";
+import { Box, Flex, HStack, Text, Link as ChakraLink } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-
+import { IoMdAddCircleOutline } from "react-icons/io";
+import { useAuth } from "@/contexts/AuthContext";
+import LogoutButton from "./LogoutButton";
 const Navbar = () => {
-  const [isAdmin, setIsAdmin] = useState(true);
+  const { user } = useAuth();
 
   return (
-    <Box p={2} border="emphasized">
+    <Box p={5} border="emphasized" background="bg.subtle">
       <HStack justify="space-between">
-        <HStack>
-          <Link to="/">
-            <Text>Home</Text>
-          </Link>
-
+        <HStack ms={6} spaceX={8}>
+          <ChakraLink asChild>
+            <Link to="/">
+              <Text>Home</Text>
+            </Link>
+          </ChakraLink>
           <Text>About</Text>
         </HStack>
-        <HStack display="flex" justifyContent="flex-end">
-          <Link to="/create-blog">{isAdmin && <Text>Add Story</Text>}</Link>
+        <HStack display="flex" justifyContent="flex-end" me={6}>
+          {user === "admin" ? (
+            <>
+              <LogoutButton />
+              <Link to="/create-blog">
+                <IoMdAddCircleOutline size="2rem" />
+              </Link>
+            </>
+          ) : (
+            <ChakraLink>
+              <Link to="/login">
+                <Text>Login</Text>
+              </Link>
+            </ChakraLink>
+          )}
         </HStack>
       </HStack>
     </Box>

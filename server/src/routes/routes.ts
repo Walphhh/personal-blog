@@ -1,7 +1,23 @@
 import express, { Router } from "express";
-import { Blog } from "./blogModel";
-
+import { Blog } from "../models/blogModel";
+import { authenticateUser } from "../middleware/authenticateUser";
 const router: Router = express.Router();
+
+// POST - Login
+router.post("/login", async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    console.log("Received login request", username, password); // Debug log
+
+    if (username === "admin" && password === "admin") {
+      res.status(200).json({ message: "Login successful" });
+    } else {
+      res.status(401).json({ error: "Invalid credentials" });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
 
 // GET - all Blogs
 router.get("/blogs", async (req, res) => {
@@ -21,8 +37,17 @@ router.get("/blogs/:id", async (req, res) => {
   try {
     // Finds blog based on the req id and sends it back as a JSON document
     const blog = await Blog.findById(req.params.id);
+    console.log("Finding Blog ID ", req.params.id); // Debug log
+
+    if (!blog) {
+      console.log("Blog not found");
+      res.status(404).json({ error: "Blog not found" });
+      return undefined;
+    }
+
     res.json(blog);
-  } catch (error) {
+  } catch {
+    console.log("Blog not found");
     res.status(404).json({ error: "Blog not found" });
   }
 });
