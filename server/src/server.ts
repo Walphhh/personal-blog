@@ -1,13 +1,16 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import routes from "./routes/routes";
+import blogRoutes from "./routes/blogRoutes";
+import userRoutes from "./routes/userRoutes";
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
-app.use("/api", routes);
+
+app.use("/api/users", userRoutes);
+app.use("/api/blogs", blogRoutes);
 
 // Always add IP and PORT
 const DB = "mongodb://127.0.0.1:27017/personal-blog";

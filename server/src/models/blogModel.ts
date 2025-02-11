@@ -14,5 +14,5 @@ const blogSchema = new mongoose.Schema<BlogI>({
   body: { type: String, required: true },
 });
 
-// Export the model
+// Export the models
 export const Blog = mongoose.model<BlogI>("Blog", blogSchema);

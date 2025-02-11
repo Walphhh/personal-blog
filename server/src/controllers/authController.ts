@@ -1,17 +1,25 @@
 import { Request, Response } from "express";
-import UserI from "../models/userModel";
+import { User } from "../models/userModel";
 
-const handleLogin = async (req: Request, res: Response) => {
-  const { user, pwd }: UserI = req.body;
+// const jwt = require("jsonwebtoken");
+// const bcrypt = require("bcrypt");
+// require("dotenv").config();
 
-  if (!user || !pwd)
-    return res
-      .status(400)
-      .json({ message: "Username and password are required." });
+export const handleLogin = async (req: Request, res: Response) => {
+  const { username, password } = req.body;
 
-  if (user === "admin" && pwd === "admin") {
-    return res.status(200).json({ message: "Login successful" });
+  // to be replaced with actual JWT
+  if (!username || !password)
+    res.status(400).json({ message: "Username and password are required." });
+
+  try {
+    console.log("Received login request", username, password); // Debug log
+    const user = await User.findOne({ username, password });
+
+    if (user) {
+      res.status(200).json({ message: "Login successful" });
+    }
+  } catch (err) {
+    console.log(err);
   }
 };
-
-export default handleLogin;

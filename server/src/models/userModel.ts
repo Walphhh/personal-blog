@@ -1,6 +1,13 @@
+import mongoose, { Document } from "mongoose";
+
 interface UserI {
-  user: string;
-  pwd: string;
+  username: string;
+  password: string;
 }
 
-export default UserI;
+const userSchema = new mongoose.Schema<UserI>({
+  username: { type: String, required: true },
+  password: { type: String, required: true },
+});
+
+export const User = mongoose.model<UserI>("User", userSchema);
