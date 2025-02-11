@@ -12,7 +12,7 @@ type AlertMessage =
   | "Blog Deleted"
   | "Blog Created"
   | "Admin Logged In"
-  | "Admin Logged Out";
+  | "Logged Out Successfully";
 
 // Shape of the Context
 // Basically everything that you can access within the provider

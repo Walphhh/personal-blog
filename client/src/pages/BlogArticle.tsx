@@ -5,13 +5,14 @@ import { Blog } from "./HomePage";
 import axios from "axios";
 import { useAlert } from "../contexts/AlertContext";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
+import { useAuth } from "@/contexts/AuthContext";
 
 const BlogArticle = () => {
   const Navigate = useNavigate();
   const { blogID } = useParams();
   const [blog, setBlog] = useState<Blog | undefined>(undefined);
   const { setAlert } = useAlert();
-
+  const { user } = useAuth();
   useEffect(() => {
     const fetchBlogArticle = async () => {
       try {
@@ -50,18 +51,20 @@ const BlogArticle = () => {
       <Heading>{blog?.title}</Heading>
       <Text>{blog?.description}</Text>
       <Text>{blog?.body}</Text>
-      <HStack>
-        <ConfirmationDialog
-          type="edit"
-          buttonStyle="gray"
-          onConfirm={() => {}}
-        />
-        <ConfirmationDialog
-          type="delete"
-          buttonStyle="red"
-          onConfirm={deleteBlog}
-        />
-      </HStack>
+      {user === "admin" && (
+        <HStack>
+          <ConfirmationDialog
+            type="edit"
+            buttonStyle="gray"
+            onConfirm={() => {}}
+          />
+          <ConfirmationDialog
+            type="delete"
+            buttonStyle="red"
+            onConfirm={deleteBlog}
+          />
+        </HStack>
+      )}
     </VStack>
   );
 };

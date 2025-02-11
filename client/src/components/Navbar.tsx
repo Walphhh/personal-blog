@@ -3,12 +3,12 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { useAuth } from "@/contexts/AuthContext";
-import LogoutButton from "./LogoutButton";
+import Logout from "./Logout";
 const Navbar = () => {
   const { user } = useAuth();
 
   return (
-    <Box p={5} border="emphasized" background="bg.subtle">
+    <Box p={5} border="emphasized" background="bg.subtle" h={16}>
       <HStack justify="space-between">
         <HStack ms={6} spaceX={8}>
           <ChakraLink asChild>
@@ -21,7 +21,7 @@ const Navbar = () => {
         <HStack display="flex" justifyContent="flex-end" me={6}>
           {user === "admin" ? (
             <>
-              <LogoutButton />
+              <Logout />
               <Link to="/create-blog">
                 <IoMdAddCircleOutline size="2rem" />
               </Link>
