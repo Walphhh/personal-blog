@@ -1,24 +1,17 @@
 import express, { Router } from "express";
-import { authenticateUser } from "../middleware/authenticateUser";
-import {
-  getBlogs,
-  getBlogByID,
-  deleteBlogByID,
-  createBlog,
-} from "../controllers/blogController";
+import { blogController } from "../controllers/blogController";
+import { verifyJWT } from "../middleware/verifyJWT";
 
 const router: Router = express.Router();
 
-// GET - all Blogs
-router.get("/", getBlogs);
+router
+  .route("/")
+  .get(blogController.getBlogs) // GET - all Blogs
+  .post(verifyJWT, blogController.createBlog); // POST
 
-// GET:id - specific blog
-router.get("/:id", getBlogByID);
-
-// DELETE:id
-router.delete("/:id", deleteBlogByID);
-
-// POST
-router.post("/", createBlog);
+router
+  .route("/:id")
+  .get(verifyJWT, blogController.getBlogByID) // GET:id - specific blog
+  .delete(verifyJWT, blogController.deleteBlogByID); // DELETE:id
 
 export default router;

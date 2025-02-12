@@ -33,7 +33,7 @@ function App() {
   ]);
 
   return (
-    <Provider>
+    <Provider enableSystem>
       <AuthProvider>
         <AlertProvider>
           <Toaster />

@@ -19,10 +19,13 @@ const Login = () => {
   const handleSubmit = async () => {
     console.log(formik.values);
     try {
-      const response = await axios.post("http://localhost:5000/api/login", {
-        username: formik.values.username,
-        password: formik.values.password,
-      });
+      const response = await axios.post(
+        "http://localhost:5000/api/users/login",
+        {
+          username: formik.values.username,
+          password: formik.values.password,
+        }
+      );
       if (response.status === 200) {
         console.log("login successful");
         setUser("admin");
