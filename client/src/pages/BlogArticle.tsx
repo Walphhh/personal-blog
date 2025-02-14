@@ -2,10 +2,10 @@ import { VStack, Heading, Text, Button, HStack } from "@chakra-ui/react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Blog } from "./HomePage";
-import axios from "axios";
 import { useAlert } from "../contexts/AlertContext";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
 import { useAuth } from "@/contexts/AuthContext";
+import blogServices from "@/services/blogAPI";
 
 const BlogArticle = () => {
   const Navigate = useNavigate();
@@ -13,34 +13,27 @@ const BlogArticle = () => {
   const [blog, setBlog] = useState<Blog | undefined>(undefined);
   const { setAlert } = useAlert();
   const { user } = useAuth();
+  const { fetchBlogByID, deleteBlogByID } = blogServices();
+
   useEffect(() => {
-    const fetchBlogArticle = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:5000/api/blogs/${blogID}`
-        );
-        setBlog(response.data);
-      } catch (err) {
-        if (axios.isAxiosError(err) && err.response?.status === 404) {
-          console.log("In Client: Blog Not Found");
-          setBlog({
-            _id: blogID as string,
-            title: "Blog Not Found",
-            description: "Blog Not Found",
-            body: "Blog Not Found",
-          });
-        }
-        console.log(err);
-      }
-    };
-    fetchBlogArticle();
+    if (blogID) {
+      const fetchBlog = async () => {
+        const data = await fetchBlogByID(blogID);
+        setBlog(data);
+      };
+      fetchBlog();
+    }
   }, [blogID]);
 
   const deleteBlog = async () => {
     try {
-      await axios.delete(`http://localhost:5000/api/blogs/${blogID}`);
-      setAlert(true, "success", "Blog Deleted");
-      Navigate("/");
+      if (blogID) {
+        const isDeleted = await deleteBlogByID(blogID);
+        if (isDeleted) {
+          setAlert(true, "success", "Blog Deleted");
+          Navigate("/");
+        }
+      }
     } catch (err) {
       console.log(err);
     }

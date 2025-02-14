@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogActionTrigger,
 } from "@/components/ui/dialog";
-import { Button, DialogRoot, DialogTrigger, useDialog } from "@chakra-ui/react";
+import { Button, DialogRoot, DialogTrigger } from "@chakra-ui/react";
 
 const Confirmation_Info = {
   delete: {

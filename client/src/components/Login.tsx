@@ -28,7 +28,8 @@ const Login = () => {
       );
       if (response.status === 200) {
         console.log("login successful");
-        setUser("admin");
+        console.log(response.data.accessToken);
+        setUser("admin", response.data.accessToken);
         setAlert(true, "success", "Admin Logged In");
         Navigate("/");
       } else console.log("No response from server");
