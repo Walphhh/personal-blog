@@ -1,6 +1,8 @@
-import { error } from "console";
 import { Request, Response, NextFunction } from "express";
 import { JsonWebTokenError } from "jsonwebtoken";
+
+// This module verifies if the request is coming from an authenticated User
+// Procedes to the next method if they are and sends an error response if not
 
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -35,6 +37,7 @@ export const verifyJWT = (
         (err: JsonWebTokenError, decoded: any) => {
           if (err) {
             res.status(403).json({ message: "Invalid token" });
+            console.log("Unauthenticated User trying to data");
             return;
           }
           req.user = decoded as DecodedToken;

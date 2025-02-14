@@ -32,6 +32,8 @@ export const handleLogin = async (req: Request, res: Response) => {
       res.cookie("jwt", refreshToken, {
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
+        sameSite: true,
+        secure: true,
       });
 
       const updatedUser = await User.findOneAndUpdate(
@@ -40,17 +42,9 @@ export const handleLogin = async (req: Request, res: Response) => {
         { new: true } // return the updated user
       );
 
-      console.log("New user refreshToken");
-      console.log(refreshToken);
-      console.log(accessToken);
-
       console.log("New updated user: ", updatedUser);
 
-      console.log("User found:", user);
-
-      res
-        .status(200)
-        .json({ refreshToken, accessToken, message: "Login successful" });
+      res.status(200).json({ accessToken, message: "Login successful" });
     }
   } catch (err) {
     console.log(err);
