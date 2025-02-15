@@ -1,35 +1,51 @@
+import axios from "axios";
 import { access } from "fs";
 import { ReactNode, useContext, createContext, useState } from "react";
+import useAxios from "../services/axiosInstance";
 
-type userT = "admin" | "viewer";
+type userType = "admin" | "viewer";
+type accessTokenType = string;
+
+type UserStateType = {
+  user: userType;
+  accessToken: accessTokenType;
+};
+
+type setUserParams = {
+  newUser?: userType;
+  newAccessToken?: accessTokenType;
+};
 
 type AuthContextType = {
-  user: userT;
-  accessToken: String;
-  setUser: (user: userT, accessToken: "") => void;
+  userState: UserStateType;
+  setUser: (params: setUserParams) => void;
 };
 
 const AuthContext = createContext<AuthContextType>({
-  user: "viewer",
-  accessToken: "",
+  userState: {
+    user: "viewer",
+    accessToken: "",
+  },
   setUser: () => {},
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [userState, setUserState] = useState({
-    user: "viewer" as userT,
-    accessToken: "",
+  const [userState, setUserState] = useState<UserStateType>({
+    user: "viewer", // default user
+    accessToken: "", // default token
   });
 
-  const setUser = (newUser: userT, newAccessToken: string) => {
-    setUserState({ user: newUser, accessToken: newAccessToken });
+  const setUser = ({ newUser, newAccessToken }: setUserParams = {}) => {
+    setUserState((prev) => ({
+      user: newUser ? newUser : prev.user,
+      accessToken: newAccessToken ? newAccessToken : prev.accessToken,
+    }));
   };
 
   return (
     <AuthContext.Provider
       value={{
-        user: userState.user,
-        accessToken: userState.accessToken,
+        userState,
         setUser,
       }}
     >
