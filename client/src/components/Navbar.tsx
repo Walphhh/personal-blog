@@ -5,7 +5,8 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 import { useAuth } from "@/contexts/AuthContext";
 import Logout from "./Logout";
 const Navbar = () => {
-  const { user } = useAuth();
+  const { userState } = useAuth();
+  const { user } = userState;
 
   return (
     <Box p={5} border="emphasized" background="bg.subtle" h={16}>
