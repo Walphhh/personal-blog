@@ -29,8 +29,6 @@ export const handleRefreshToken = (req: Request, res: Response) => {
   console.log("Refresh Token is: ", refreshToken);
 
   try {
-    const user = User.findOne({ refreshToken });
-
     // jwt evaluation
     jwt.verify(
       refreshToken,

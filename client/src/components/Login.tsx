@@ -2,8 +2,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import { Navigate, useNavigate } from "react-router-dom";
-import { Field, Box, Input, Button, Flex } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+import { Field, Box, Input, Button } from "@chakra-ui/react";
 import { useAlert } from "@/contexts/AlertContext";
 
 const Login = () => {
