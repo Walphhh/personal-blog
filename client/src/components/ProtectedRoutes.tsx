@@ -3,7 +3,8 @@ import React, { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 
 const ProtectedRoutes = ({ children }: { children: ReactNode }) => {
-  const { user } = useAuth();
+  const { userState } = useAuth();
+  const { user } = userState;
 
   return user === "admin" ? (
     <>{children}</>

@@ -20,7 +20,7 @@ export const handleLogin = async (req: Request, res: Response) => {
       const accessToken = jwt.sign(
         { username: user.username },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: "15s" }
+        { expiresIn: "10s" }
       );
 
       const refreshToken = jwt.sign(
@@ -32,8 +32,9 @@ export const handleLogin = async (req: Request, res: Response) => {
       res.cookie("jwt", refreshToken, {
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
-        sameSite: true,
-        secure: true,
+        sameSite: "lax", // set to not lax in prod
+        secure: true, // set to true in prod
+        path: "/",
       });
 
       const updatedUser = await User.findOneAndUpdate(
@@ -43,6 +44,8 @@ export const handleLogin = async (req: Request, res: Response) => {
       );
 
       console.log("New updated user: ", updatedUser);
+      console.log("Access Token: ", accessToken);
+      console.log("Refresh Token: ", refreshToken);
 
       res.status(200).json({ accessToken, message: "Login successful" });
     }

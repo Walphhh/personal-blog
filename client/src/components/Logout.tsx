@@ -12,7 +12,7 @@ const Logout = () => {
     <ChakraLink>
       <Link
         onClick={() => {
-          setUser("viewer", ""),
+          setUser({ newUser: "viewer", newAccessToken: "" }),
             setAlert(true, "success", "Logged Out Successfully");
         }}
         to="/"

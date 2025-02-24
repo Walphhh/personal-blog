@@ -12,7 +12,8 @@ const BlogArticle = () => {
   const { blogID } = useParams();
   const [blog, setBlog] = useState<Blog | undefined>(undefined);
   const { setAlert } = useAlert();
-  const { user } = useAuth();
+  const { userState } = useAuth();
+  const { user } = userState;
   const { fetchBlogByID, deleteBlogByID } = blogServices();
 
   useEffect(() => {

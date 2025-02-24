@@ -24,6 +24,14 @@ const blogServices = () => {
         const response = await axiosInstance.get(`/blogs/${blogID}`);
         return response.data as Blog;
       } catch (err) {
+        if (axios.isAxiosError(err) && err.response?.status === 401) {
+          return {
+            _id: blogID,
+            title: "Unauthorised",
+            description: "Unauthorised",
+            body: "Unauthorised",
+          };
+        }
         if (axios.isAxiosError(err) && err.response?.status === 404) {
           console.log("In Client: Blog Not Found");
           return {

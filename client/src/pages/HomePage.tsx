@@ -14,7 +14,8 @@ export interface Blog {
 const HomePage = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const { fetchBlogs } = blogServices();
-  const { user } = useAuth();
+  const { userState } = useAuth();
+  const { user } = userState;
 
   // Fetches all the blogs from the backend
   useEffect(() => {
@@ -30,6 +31,7 @@ const HomePage = () => {
       return (
         <>
           <BlogPreviewCard
+            key={blog._id}
             _id={blog._id}
             title={blog.title}
             description={blog.description}

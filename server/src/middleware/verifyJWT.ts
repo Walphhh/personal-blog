@@ -22,6 +22,7 @@ export const verifyJWT = (
   next: NextFunction
 ): void => {
   const authHeader = req.headers.authorization;
+  const cookies = req.cookies;
 
   try {
     if (!authHeader) {
@@ -29,6 +30,7 @@ export const verifyJWT = (
       return;
     } else {
       console.log(authHeader);
+      console.log(cookies);
       const token = authHeader.split(" ")[1]; // Because format is {Header: Bearer [Token]}
 
       jwt.verify(
@@ -36,10 +38,11 @@ export const verifyJWT = (
         process.env.ACCESS_TOKEN_SECRET,
         (err: JsonWebTokenError, decoded: any) => {
           if (err) {
-            res.status(403).json({ message: "Invalid token" });
+            res.status(401).json({ message: "Invalid accessToken" });
             console.log("Unauthenticated User trying to data");
             return;
           }
+          console.log(decoded);
           req.user = decoded as DecodedToken;
           next();
         }

@@ -20,15 +20,19 @@ const Login = () => {
     console.log(formik.values);
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/users/login",
+        "https://localhost:5000/api/users/login",
         {
           username: formik.values.username,
           password: formik.values.password,
+        },
+        {
+          withCredentials: true,
         }
       );
       if (response.status === 200) {
         console.log("login successful");
         console.log(response.data.accessToken);
+        console.log();
         setUser({
           newUser: "admin",
           newAccessToken: response.data.accessToken,

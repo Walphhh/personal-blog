@@ -6,7 +6,7 @@ import useAxios from "../services/axiosInstance";
 type userType = "admin" | "viewer";
 type accessTokenType = string;
 
-type UserStateType = {
+export type UserStateType = {
   user: userType;
   accessToken: accessTokenType;
 };
