@@ -12,7 +12,8 @@ type AlertMessage =
   | "Blog Deleted"
   | "Blog Created"
   | "Admin Logged In"
-  | "Logged Out Successfully";
+  | "Logged Out Successfully"
+  | "Invalid Username or Password";
 
 // Shape of the Context
 // Basically everything that you can access within the provider
@@ -57,7 +58,7 @@ export const AlertProvider = ({ children }: { children: ReactNode }) => {
   const showToast = () => {
     toaster.create({
       title: alertState.message,
-      type: "success",
+      type: alertState.status,
       duration: toastDuration,
     });
     console.log(alertState.status, alertState.message);

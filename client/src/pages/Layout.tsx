@@ -8,12 +8,9 @@ const Layout = () => {
       <nav>
         <Navbar />
       </nav>
-
-      <Box background="bg.muted">
+      <Box background="bg.muted" p={8}>
         <Outlet />
       </Box>
-
-      <footer>{/* Footer content */}</footer>
     </Box>
   );
 };

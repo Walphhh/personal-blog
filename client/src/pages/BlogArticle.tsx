@@ -6,6 +6,7 @@ import { useAlert } from "../contexts/AlertContext";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
 import { useAuth } from "@/contexts/AuthContext";
 import blogServices from "@/services/blogAPI";
+import Fullscreen from "./Fullscreen";
 
 const BlogArticle = () => {
   const Navigate = useNavigate();
@@ -41,25 +42,27 @@ const BlogArticle = () => {
   };
 
   return (
-    <VStack>
-      <Heading>{blog?.title}</Heading>
-      <Text>{blog?.description}</Text>
-      <Text>{blog?.body}</Text>
-      {user === "admin" && (
-        <HStack>
-          <ConfirmationDialog
-            type="edit"
-            buttonStyle="gray"
-            onConfirm={() => {}}
-          />
-          <ConfirmationDialog
-            type="delete"
-            buttonStyle="red"
-            onConfirm={deleteBlog}
-          />
-        </HStack>
-      )}
-    </VStack>
+    <Fullscreen>
+      <VStack>
+        <Heading>{blog?.title}</Heading>
+        <Text>{blog?.description}</Text>
+        <Text>{blog?.body}</Text>
+        {user === "admin" && (
+          <HStack>
+            <ConfirmationDialog
+              type="edit"
+              buttonStyle="gray"
+              onConfirm={() => {}}
+            />
+            <ConfirmationDialog
+              type="delete"
+              buttonStyle="red"
+              onConfirm={deleteBlog}
+            />
+          </HStack>
+        )}
+      </VStack>
+    </Fullscreen>
   );
 };
 

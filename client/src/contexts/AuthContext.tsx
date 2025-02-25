@@ -1,7 +1,4 @@
-import axios from "axios";
-import { access } from "fs";
 import { ReactNode, useContext, createContext, useState } from "react";
-import useAxios from "../services/axiosInstance";
 
 type userType = "admin" | "viewer";
 type accessTokenType = string;

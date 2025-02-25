@@ -1,14 +1,16 @@
 import { Button, Input, Field, Textarea, Box } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "@/contexts/AlertContext";
+import blogServices from "@/services/blogAPI";
+import { Blog } from "@/services/blogAPI";
 
 // The Form uses Formik to handle form submission and Yup for schema validation
 const CreateBlogForm = () => {
   const Navigate = useNavigate();
   const { setAlert } = useAlert();
+  const { createBlog } = blogServices();
 
   // Schema for validation
   const schema = Yup.object().shape({
@@ -30,13 +32,9 @@ const CreateBlogForm = () => {
       description: "",
       body: "",
     },
-    onSubmit: async (values) => {
+    onSubmit: async (values: Blog) => {
       try {
-        const response = await axios.post(
-          "http://localhost:5000/api/blogs",
-          values
-        );
-        console.log(response.data);
+        await createBlog(values);
         setAlert(true, "success", "Blog Created");
         Navigate("/");
       } catch (err) {
@@ -53,13 +51,9 @@ const CreateBlogForm = () => {
   console.log(formik.touched);
   return (
     <Box p={8}>
-      <Box pb={8}>
-        <form onSubmit={formik.handleSubmit}>
-          <Field.Root
-            invalid={isValid("title")}
-            onBlur={formik.handleBlur}
-            pb={8}
-          >
+      <form onSubmit={formik.handleSubmit}>
+        <Box pb={8}>
+          <Field.Root invalid={isValid("title")} onBlur={formik.handleBlur}>
             <Field.Label>Title</Field.Label>
             <Input
               name="title"
@@ -89,9 +83,9 @@ const CreateBlogForm = () => {
             />
             <Field.ErrorText>{formik.errors.body}</Field.ErrorText>
           </Field.Root>
-          <Button type="submit">Submit</Button>
-        </form>
-      </Box>
+        </Box>
+        <Button type="submit">Submit</Button>
+      </form>
     </Box>
   );
 };

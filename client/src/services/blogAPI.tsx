@@ -1,6 +1,13 @@
 import axios from "axios";
 import useAxios from "./axiosInstance";
-import { Blog } from "@/pages/HomePage";
+
+// This file includes all the blog realated APIs as well as the the Blog Interface
+export interface Blog {
+  _id?: string;
+  title: string;
+  description: string;
+  body: string;
+}
 
 const blogServices = () => {
   const axiosInstance = useAxios();
@@ -48,6 +55,14 @@ const blogServices = () => {
     deleteBlogByID: async (blogID: string): Promise<Boolean | undefined> => {
       try {
         return await axiosInstance.delete(`/blogs/${blogID}`);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    createBlog: async (newBlog: Blog): Promise<Boolean | undefined> => {
+      try {
+        return await axiosInstance.post(`/blogs`, newBlog);
       } catch (err) {
         console.log(err);
       }

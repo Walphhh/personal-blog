@@ -2,12 +2,15 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Field, Box, Input, Button } from "@chakra-ui/react";
 import { useAlert } from "@/contexts/AlertContext";
+import Fullscreen from "@/pages/Fullscreen";
 
 const Login = () => {
   const Navigate = useNavigate();
+  const [error, setError] = useState();
   const { setUser } = useAuth();
   const { setAlert } = useAlert();
 
@@ -17,7 +20,6 @@ const Login = () => {
   });
 
   const handleSubmit = async () => {
-    console.log(formik.values);
     try {
       const response = await axios.post(
         "https://localhost:5000/api/users/login",
@@ -29,18 +31,21 @@ const Login = () => {
           withCredentials: true,
         }
       );
+
       if (response.status === 200) {
         console.log("login successful");
         console.log(response.data.accessToken);
-        console.log();
         setUser({
           newUser: "admin",
           newAccessToken: response.data.accessToken,
         });
         setAlert(true, "success", "Admin Logged In");
         Navigate("/");
-      } else console.log("No response from server");
+      }
     } catch (err) {
+      if (axios.isAxiosError(err) && err.response?.status === 401) {
+        setAlert(true, "error", "Invalid Username or Password");
+      }
       console.log(err);
     }
   };
@@ -55,13 +60,8 @@ const Login = () => {
   });
 
   return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      minH="calc(100vh - 4rem)"
-    >
-      <Box bg="pink.200" p={8} rounded={16}>
+    <Fullscreen>
+      <Box p={8} rounded={16}>
         <form onSubmit={formik.handleSubmit}>
           <Field.Root
             invalid={formik.touched.username}
@@ -72,6 +72,7 @@ const Login = () => {
               name="username"
               onChange={formik.handleChange}
               value={formik.values.username}
+              bg="bg.subtle"
             />
             <Field.ErrorText>{formik.errors.username}</Field.ErrorText>
           </Field.Root>
@@ -84,6 +85,7 @@ const Login = () => {
               name="password"
               onChange={formik.handleChange}
               value={formik.values.password}
+              bg="bg.subtle"
             />
           </Field.Root>
           <Button type="submit" mt={6}>
@@ -91,7 +93,7 @@ const Login = () => {
           </Button>
         </form>
       </Box>
-    </Box>
+    </Fullscreen>
   );
 };
 

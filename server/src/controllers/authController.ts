@@ -16,6 +16,11 @@ export const handleLogin = async (req: Request, res: Response) => {
     console.log("Received login request", username, password); // Debug log
     const user = await User.findOne({ username, password }); //
 
+    if (!user) {
+      res.status(401).json({ message: "Invalid Username or Password" });
+      return;
+    }
+
     if (user) {
       const accessToken = jwt.sign(
         { username: user.username },
