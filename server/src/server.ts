@@ -33,7 +33,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/blogs", blogRoutes);
 
 // Always add IP and PORT
-const DB = "mongodb://127.0.0.1:27017/personal-blog";
+const DB = "mongodb://127.0.0.1:27017/personal-blog"; // local server momentarily, needs to be switched to an Atlas server for deployment
 const port = process.env.PORT || 5000;
 
 mongoose
@@ -46,12 +46,6 @@ mongoose
     console.log("Connection Error: ", err);
     process.exit(1);
   });
-
-const startServer = () => {
-  app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-  });
-};
 
 const start_sslServer = () => {
   sslServer.listen(port, () => {

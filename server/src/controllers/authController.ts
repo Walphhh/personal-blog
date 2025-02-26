@@ -6,15 +6,15 @@ const bcrypt = require("bcrypt");
 require("dotenv").config();
 
 export const handleLogin = async (req: Request, res: Response) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
   // to be replaced with actual JWT
-  if (!username || !password)
+  if (!email || !password)
     res.status(400).json({ message: "Username and password are required." });
 
   try {
-    console.log("Received login request", username, password); // Debug log
-    const user = await User.findOne({ username, password }); //
+    console.log("Received login request", email, password); // Debug log
+    const user = await User.findOne({ email, password }); //
 
     if (!user) {
       res.status(401).json({ message: "Invalid Username or Password" });
@@ -23,13 +23,13 @@ export const handleLogin = async (req: Request, res: Response) => {
 
     if (user) {
       const accessToken = jwt.sign(
-        { username: user.username },
+        { email: user.email },
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: "10s" }
       );
 
       const refreshToken = jwt.sign(
-        { username: user.username },
+        { email: user.email },
         process.env.REFRESH_TOKEN_SECRET,
         { expiresIn: "1d" }
       );
@@ -43,7 +43,7 @@ export const handleLogin = async (req: Request, res: Response) => {
       });
 
       const updatedUser = await User.findOneAndUpdate(
-        { username: user.username }, // finding the user
+        { email: user.email }, // finding the user
         { refreshToken: refreshToken }, // updating user's refreshToken
         { new: true } // return the updated user
       );
@@ -51,8 +51,12 @@ export const handleLogin = async (req: Request, res: Response) => {
       console.log("New updated user: ", updatedUser);
       console.log("Access Token: ", accessToken);
       console.log("Refresh Token: ", refreshToken);
-
-      res.status(200).json({ accessToken, message: "Login successful" });
+      res.status(200).json({
+        username: user.username,
+        role: user.role, // not very secure because an attacker could just modify the role
+        accessToken,
+        message: "Login successful",
+      });
     }
   } catch (err) {
     console.log(err);
