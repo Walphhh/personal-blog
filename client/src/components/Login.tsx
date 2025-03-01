@@ -2,7 +2,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Field, Box, Input, Button } from "@chakra-ui/react";
 import { useAlert } from "@/contexts/AlertContext";
@@ -32,8 +31,6 @@ const Login = () => {
       );
 
       if (response.status === 200) {
-        console.log("login successful");
-        console.log(response.data.accessToken);
         setUser({
           newID: response.data.id,
           newRole: response.data.role,
@@ -62,9 +59,12 @@ const Login = () => {
 
   return (
     <Fullscreen>
-      <Box p={8} rounded={16}>
+      <Box p={8} rounded={16} background="bg.subtle">
         <form onSubmit={formik.handleSubmit}>
-          <Field.Root invalid={formik.touched.email} onBlur={formik.handleBlur}>
+          <Field.Root
+            invalid={formik.touched.email && Boolean(formik.errors.email)}
+            onBlur={formik.handleBlur}
+          >
             <Field.Label>Email</Field.Label>
             <Input
               name="email"
@@ -75,7 +75,7 @@ const Login = () => {
             <Field.ErrorText>{formik.errors.email}</Field.ErrorText>
           </Field.Root>
           <Field.Root
-            invalid={formik.touched.password}
+            invalid={formik.touched.password && Boolean(formik.errors.password)}
             onBlur={formik.handleBlur}
           >
             <Field.Label>Password</Field.Label>
@@ -86,6 +86,7 @@ const Login = () => {
               value={formik.values.password}
               bg="bg.subtle"
             />
+            <Field.ErrorText>{formik.errors.password}</Field.ErrorText>
           </Field.Root>
           <Button type="submit" mt={6}>
             Login
