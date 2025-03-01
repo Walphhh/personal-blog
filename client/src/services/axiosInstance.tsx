@@ -21,7 +21,6 @@ const useAxios = () => {
     const requestInterceptor = axiosInstance.interceptors.request.use(
       (config) => {
         if (userState.accessToken.length > 0) {
-          console.log("Sending Request with accessToken");
           config.headers.Authorization = `Bearer ${latestToken.current}`;
         }
         return config;
@@ -32,7 +31,6 @@ const useAxios = () => {
     // Response Interceptor
     const responseInterceptor = axiosInstance.interceptors.response.use(
       (response) => {
-        console.log("Response Recieved: ", response);
         return response;
       },
       async (err) => {
@@ -40,9 +38,6 @@ const useAxios = () => {
         if (err.response.status === 401 && !originalRequest._retry) {
           originalRequest._retry = true;
           try {
-            console.log(
-              `Attempting Token Refresh at endpoint: ${API_BaseURL}/refresh`
-            );
             const res = await axiosInstance.post(
               "/refresh",
               {},
@@ -56,7 +51,6 @@ const useAxios = () => {
             }
             return axiosInstance(originalRequest);
           } catch (err) {
-            console.log("Token Refresh Failed: ", err);
             setUser({ newAccessToken: "" });
           }
         }

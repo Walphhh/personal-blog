@@ -1,11 +1,11 @@
 import { VStack, Heading, Text, Button, HStack } from "@chakra-ui/react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Blog } from "./HomePage";
+import { Blog } from "@/services/blogServices";
 import { useAlert } from "../contexts/AlertContext";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
 import { useAuth } from "@/contexts/AuthContext";
-import blogServices from "@/services/blogAPI";
+import blogServices from "@/services/blogServices";
 import Fullscreen from "./Fullscreen";
 
 const BlogArticle = () => {
@@ -14,7 +14,7 @@ const BlogArticle = () => {
   const [blog, setBlog] = useState<Blog | undefined>(undefined);
   const { setAlert } = useAlert();
   const { userState } = useAuth();
-  const { user } = userState;
+  const { role } = userState;
   const { fetchBlogByID, deleteBlogByID } = blogServices();
 
   useEffect(() => {
@@ -47,7 +47,7 @@ const BlogArticle = () => {
         <Heading>{blog?.title}</Heading>
         <Text>{blog?.description}</Text>
         <Text>{blog?.body}</Text>
-        {user === "admin" && (
+        {role === "admin" && (
           <HStack>
             <ConfirmationDialog
               type="edit"

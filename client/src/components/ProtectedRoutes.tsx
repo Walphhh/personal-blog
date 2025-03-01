@@ -4,9 +4,9 @@ import { Navigate } from "react-router-dom";
 
 const ProtectedRoutes = ({ children }: { children: ReactNode }) => {
   const { userState } = useAuth();
-  const { user } = userState;
+  const { role } = userState;
 
-  return user === "admin" ? (
+  return role === "admin" ? (
     <>{children}</>
   ) : (
     <>

@@ -3,14 +3,16 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "@/contexts/AlertContext";
-import blogServices from "@/services/blogAPI";
-import { Blog } from "@/services/blogAPI";
+import blogServices from "@/services/blogServices";
+import { Blog } from "@/services/blogServices";
+import { useAuth } from "@/contexts/AuthContext";
 
 // The Form uses Formik to handle form submission and Yup for schema validation
 const CreateBlogForm = () => {
   const Navigate = useNavigate();
   const { setAlert } = useAlert();
-  const { createBlog } = blogServices();
+  const { postBlog } = blogServices();
+  const { userState } = useAuth();
 
   // Schema for validation
   const schema = Yup.object().shape({
@@ -32,9 +34,10 @@ const CreateBlogForm = () => {
       description: "",
       body: "",
     },
-    onSubmit: async (values: Blog) => {
+    onSubmit: async (values) => {
       try {
-        await createBlog(values);
+        const newValues: Blog = { ...values, authorUserID: userState.id };
+        await postBlog(newValues);
         setAlert(true, "success", "Blog Created");
         Navigate("/");
       } catch (err) {
@@ -47,8 +50,6 @@ const CreateBlogForm = () => {
   const isValid = (fieldName: keyof typeof formik.values) => {
     return formik.touched[fieldName] && Boolean(formik.errors[fieldName]);
   };
-
-  console.log(formik.touched);
   return (
     <Box p={8}>
       <form onSubmit={formik.handleSubmit}>

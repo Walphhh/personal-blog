@@ -1,15 +1,19 @@
 import { ReactNode, useContext, createContext, useState } from "react";
 
-type userType = "admin" | "viewer";
+type roleType = "admin" | "user" | "viewer";
 type accessTokenType = string;
 
 export type UserStateType = {
-  user: userType;
+  id: string;
+  username: string;
+  role: roleType;
   accessToken: accessTokenType;
 };
 
 type setUserParams = {
-  newUser?: userType;
+  newID?: string;
+  newUsername?: string;
+  newRole?: roleType;
   newAccessToken?: accessTokenType;
 };
 
@@ -20,7 +24,9 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType>({
   userState: {
-    user: "viewer",
+    id: "",
+    username: "",
+    role: "viewer",
     accessToken: "",
   },
   setUser: () => {},
@@ -28,13 +34,22 @@ const AuthContext = createContext<AuthContextType>({
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [userState, setUserState] = useState<UserStateType>({
-    user: "viewer", // default user
+    id: "",
+    username: "",
+    role: "viewer", // default role
     accessToken: "", // default token
   });
 
-  const setUser = ({ newUser, newAccessToken }: setUserParams = {}) => {
+  const setUser = ({
+    newID,
+    newUsername,
+    newRole,
+    newAccessToken,
+  }: setUserParams = {}) => {
     setUserState((prev) => ({
-      user: newUser ? newUser : prev.user,
+      id: newID ? newID : prev.id,
+      username: newUsername ? newUsername : prev.username,
+      role: newRole ? newRole : prev.role,
       accessToken: newAccessToken ? newAccessToken : prev.accessToken,
     }));
   };

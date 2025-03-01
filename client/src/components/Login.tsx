@@ -10,12 +10,11 @@ import Fullscreen from "@/pages/Fullscreen";
 
 const Login = () => {
   const Navigate = useNavigate();
-  const [error, setError] = useState();
   const { setUser } = useAuth();
   const { setAlert } = useAlert();
 
   const schema = Yup.object().shape({
-    username: Yup.string().required("Username is required"),
+    email: Yup.string().required("Username is required"),
     password: Yup.string().required("Password is required"),
   });
 
@@ -24,7 +23,7 @@ const Login = () => {
       const response = await axios.post(
         "https://localhost:5000/api/users/login",
         {
-          username: formik.values.username,
+          email: formik.values.email,
           password: formik.values.password,
         },
         {
@@ -36,7 +35,9 @@ const Login = () => {
         console.log("login successful");
         console.log(response.data.accessToken);
         setUser({
-          newUser: "admin",
+          newID: response.data.id,
+          newRole: response.data.role,
+          newUsername: response.data.username,
           newAccessToken: response.data.accessToken,
         });
         setAlert(true, "success", "Admin Logged In");
@@ -52,7 +53,7 @@ const Login = () => {
 
   const formik = useFormik({
     initialValues: {
-      username: "",
+      email: "",
       password: "",
     },
     validationSchema: schema,
@@ -63,18 +64,15 @@ const Login = () => {
     <Fullscreen>
       <Box p={8} rounded={16}>
         <form onSubmit={formik.handleSubmit}>
-          <Field.Root
-            invalid={formik.touched.username}
-            onBlur={formik.handleBlur}
-          >
-            <Field.Label>Username</Field.Label>
+          <Field.Root invalid={formik.touched.email} onBlur={formik.handleBlur}>
+            <Field.Label>Email</Field.Label>
             <Input
-              name="username"
+              name="email"
               onChange={formik.handleChange}
-              value={formik.values.username}
+              value={formik.values.email}
               bg="bg.subtle"
             />
-            <Field.ErrorText>{formik.errors.username}</Field.ErrorText>
+            <Field.ErrorText>{formik.errors.email}</Field.ErrorText>
           </Field.Root>
           <Field.Root
             invalid={formik.touched.password}
@@ -83,6 +81,7 @@ const Login = () => {
             <Field.Label>Password</Field.Label>
             <Input
               name="password"
+              type="password"
               onChange={formik.handleChange}
               value={formik.values.password}
               bg="bg.subtle"

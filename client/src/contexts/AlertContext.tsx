@@ -61,7 +61,6 @@ export const AlertProvider = ({ children }: { children: ReactNode }) => {
       type: alertState.status,
       duration: toastDuration,
     });
-    console.log(alertState.status, alertState.message);
   };
 
   useEffect(() => {
