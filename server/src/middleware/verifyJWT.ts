@@ -9,11 +9,11 @@ require("dotenv").config();
 
 // Extend the Request type
 interface CustomRequest extends Request {
-  user?: DecodedToken; // Make user property available on request
+  email?: DecodedToken; // Make user property available on request
 }
 
 interface DecodedToken {
-  username: string;
+  email: string;
 }
 
 export const verifyJWT = (
@@ -43,7 +43,7 @@ export const verifyJWT = (
             return;
           }
           console.log(decoded);
-          req.user = decoded as DecodedToken;
+          req.email = decoded as DecodedToken;
           next();
         }
       );

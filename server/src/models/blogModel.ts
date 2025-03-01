@@ -5,7 +5,7 @@ export interface BlogI extends Document {
   title: string;
   description: string;
   body: string;
-  authorID: string;
+  authorUserID: string; // Primary key, refers to the userID of the author
 }
 
 // Schema Definition
@@ -14,7 +14,7 @@ const blogSchema = new mongoose.Schema<BlogI>(
     title: { type: String, required: true },
     description: { type: String, required: true },
     body: { type: String, required: true },
-    authorID: { type: String, required: true },
+    authorUserID: { type: String, required: true },
   },
   { timestamps: true }
 );

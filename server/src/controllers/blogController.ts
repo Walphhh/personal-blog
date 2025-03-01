@@ -50,7 +50,7 @@ export const blogController = {
         title: req.body.title,
         description: req.body.description,
         body: req.body.body,
-        authorID: req.body.authorID,
+        authorUserID: req.body.authorUserID,
       });
       const savedBlog = await newBlog.save(); // saving the new Blog
       res.status(201).json(savedBlog); // sending back the doc

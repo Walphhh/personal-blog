@@ -52,6 +52,7 @@ export const handleLogin = async (req: Request, res: Response) => {
       console.log("Access Token: ", accessToken);
       console.log("Refresh Token: ", refreshToken);
       res.status(200).json({
+        id: user.id,
         username: user.username,
         role: user.role, // not very secure because an attacker could just modify the role
         accessToken,

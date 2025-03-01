@@ -52,7 +52,11 @@ const start_sslServer = () => {
     console.log(`Secure Server running on port ${port}`);
   });
 };
-
+const startServer = () => {
+  app.listen(port, () => {
+    console.log("Running server on port ", port);
+  });
+};
 const sslServer = https.createServer(
   {
     key: fs.readFileSync(path.join(__dirname, "..", "certificate", "key.pem")),
