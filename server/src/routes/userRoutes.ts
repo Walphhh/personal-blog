@@ -5,6 +5,7 @@ import { userController } from "../controllers/userController";
 const router: Router = Router();
 
 router.post("/login", handleLogin);
+router.post("/sign-up", userController.postUser);
 router.get("/username/:id", userController.findUsernameByID);
 
 export default router;
