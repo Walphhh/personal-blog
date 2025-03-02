@@ -21,7 +21,7 @@ const Navbar = () => {
           {userState.role === "admin" ? (
             <>
               <Logout />
-              <Link to="/create-blog">
+              <Link to="/blog/create-blog">
                 <IoMdAddCircleOutline size="2rem" />
               </Link>
             </>

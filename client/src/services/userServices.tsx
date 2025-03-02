@@ -1,5 +1,11 @@
 import useAxios from "./axiosInstance";
 
+export interface newUser {
+  username: string;
+  email: string;
+  password: string;
+}
+
 const userServices = () => {
   const axiosInstance = useAxios();
 
@@ -17,6 +23,26 @@ const userServices = () => {
       } catch (err) {
         console.log(err);
         return "Unknown Author";
+      }
+    },
+
+    /***/
+    createUser: async (newUser: newUser): Promise<Boolean | any> => {
+      try {
+        const response = await axiosInstance.post("/users/sign-up", newUser);
+
+        if (response.status === 200) {
+          return true;
+        }
+
+        if (
+          response.status === 409 &&
+          response.data.message === "email already in use"
+        )
+          return "email already in use";
+      } catch (err) {
+        console.log(err);
+        return err;
       }
     },
   };

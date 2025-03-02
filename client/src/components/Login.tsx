@@ -13,7 +13,7 @@ const Login = () => {
   const { setAlert } = useAlert();
 
   const schema = Yup.object().shape({
-    email: Yup.string().required("Username is required"),
+    email: Yup.string().email().required("Email is required"),
     password: Yup.string().required("Password is required"),
   });
 
