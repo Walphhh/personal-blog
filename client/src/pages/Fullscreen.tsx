@@ -11,7 +11,7 @@ const Fullscreen = ({ children, ...props }: FullscreenProps) => {
       display="flex"
       justifyContent="center"
       alignItems="center"
-      minH="calc(100vh - 4rem)"
+      minH="calc(100vh - 8rem)"
       {...props}
     >
       {children}

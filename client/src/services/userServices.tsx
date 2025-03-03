@@ -6,6 +6,8 @@ export interface newUser {
   password: string;
 }
 
+export type StatusCode = 409 | 200;
+
 const userServices = () => {
   const axiosInstance = useAxios();
 
@@ -27,22 +29,22 @@ const userServices = () => {
     },
 
     /***/
-    createUser: async (newUser: newUser): Promise<Boolean | any> => {
+    createUser: async (newUser: newUser): Promise<StatusCode> => {
       try {
         const response = await axiosInstance.post("/users/sign-up", newUser);
 
         if (response.status === 200) {
-          return true;
+          return 200;
         }
 
         if (
           response.status === 409 &&
           response.data.message === "email already in use"
         )
-          return "email already in use";
-      } catch (err) {
-        console.log(err);
-        return err;
+          return 409;
+      } catch (err: any) {
+        console.log(err.response.status);
+        return err.response.status;
       }
     },
   };
