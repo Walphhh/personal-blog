@@ -18,7 +18,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useAlert } from "@/contexts/AlertContext";
 
 const Signup = () => {
-  const { createUser } = userServices();
+  const { createUser, authenticateUser } = userServices();
   const [error, setError] = useState("");
   const Navigate = useNavigate();
   const { setUser } = useAuth();
@@ -51,14 +51,27 @@ const Signup = () => {
       console.log(newUser);
       const response = await createUser(newUser);
 
+      console.log(response);
+
       // Response 409 handler
-      if (response === 409) {
+      if (response.status === 409) {
         formik.setErrors({ email: "Email already in use" });
       }
 
       // Response 200 handler
-      if (response === 200) {
-        set;
+      if (response.status === 200) {
+        const response = await authenticateUser(
+          userDetails.email,
+          userDetails.password
+        );
+
+        setUser({
+          newID: response.data.id,
+          newRole: response.data.role,
+          newUsername: response.data.username,
+          newAccessToken: response.data.accessToken,
+        });
+        setAlert(true, "success", "Account Created");
         Navigate("/");
       }
     } catch (err) {
