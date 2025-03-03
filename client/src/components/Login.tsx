@@ -12,7 +12,7 @@ const Login = () => {
   const Navigate = useNavigate();
   const { setUser } = useAuth();
   const { setAlert } = useAlert();
-  const { loginUser } = userServices();
+  const { authenticateUser } = userServices();
 
   const schema = Yup.object().shape({
     email: Yup.string().email().required("Email is required"),
@@ -20,7 +20,7 @@ const Login = () => {
   });
 
   const handleSubmit = async () => {
-    const response = await loginUser(
+    const response = await authenticateUser(
       formik.values.email,
       formik.values.password
     );

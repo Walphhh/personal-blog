@@ -1,5 +1,5 @@
 import useAxios from "./axiosInstance";
-
+import { useAuth } from "@/contexts/AuthContext";
 export interface newUser {
   username: string;
   email: string;
@@ -10,6 +10,7 @@ export type StatusCode = 409 | 200;
 
 const userServices = () => {
   const axiosInstance = useAxios();
+  const { setUser } = useAuth();
 
   return {
     /**
@@ -29,7 +30,7 @@ const userServices = () => {
     },
 
     /***/
-    createUser: async (newUser: newUser): Promise<StatusCode> => {
+    createUser: async (newUser: newUser): Promise<StatusCode | undefined> => {
       try {
         const response = await axiosInstance.post("/users/sign-up", newUser);
 
@@ -45,6 +46,28 @@ const userServices = () => {
       } catch (err: any) {
         console.log(err.response.status);
         return err.response.status;
+      }
+    },
+
+    /**
+     * user login and sets the user state
+     * @param email - email of the user
+     * @param password - password of the user
+     * @returns response from the server
+     */
+    authenticateUser: async (
+      email: string,
+      password: string
+    ): Promise<any | undefined> => {
+      try {
+        const response = await axiosInstance.post(
+          "/users/login",
+          { email: email, password: password },
+          { withCredentials: true }
+        );
+        return response;
+      } catch (err) {
+        return err;
       }
     },
   };
