@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { User } from "../models/userModel";
 import { error } from "console";
 
+const bcrypt = require("bcrypt");
+
 export const userController = {
   /**
    *  Finds Username by userID
@@ -25,9 +27,16 @@ export const userController = {
     }
   },
 
+  /**
+   * Creates a new user
+   * @param User
+   * @returns response status of the process
+   */
   postUser: async (req: Request, res: Response) => {
     try {
       console.log(req.body);
+
+      // Empty request handler
       if (Object.keys(req.body).length === 0) {
         res.status(400).json({ error: "request body empty" });
         return;
@@ -35,17 +44,19 @@ export const userController = {
 
       const { username, email, password } = req.body;
 
+      // Incorrect / missing request properties handler
       if (!username || !email || !password) {
-        res
-          .status(400)
-          .json({
-            error: "Incorrect or missing properties in the request body",
-          });
+        res.status(400).json({
+          error: "Incorrect or missing properties in the request body",
+        });
       }
+
+      const passwordHash = await bcrypt.hash(password, 10);
+
       const newUser = new User({
         username: username,
         email: email,
-        password: password,
+        password: passwordHash,
         role: "user",
         refreshToken: "",
       });

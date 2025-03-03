@@ -24,7 +24,7 @@ app.use(
 );
 
 app.use((req, res, next) => {
-  console.log("Incoming Request: ", req.method, req.path, req.headers);
+  // console.log("Incoming Request: ", req.method, req.path, req.headers);
   next();
 });
 

@@ -9,27 +9,34 @@ export const handleLogin = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   // to be replaced with actual JWT
-  if (!email || !password)
+  if (!req.body.email)
     res.status(400).json({ message: "Username and password are required." });
 
   try {
-    console.log("Received login request", email, password); // Debug log
-    const user = await User.findOne({ email, password }); //
+    console.log("Received login request", email); // Debug log
+    const user = await User.findOne({ email }); //
 
     if (!user) {
-      res.status(401).json({ message: "Invalid Username or Password" });
+      res.status(401).json({ message: "Invalid Email" });
       return;
     }
 
     if (user) {
+      const passwordMatch = await bcrypt.compare(password, user.password);
+
+      if (!passwordMatch) {
+        res.status(401).json({ message: "Invalid Password" });
+        return;
+      }
+
       const accessToken = jwt.sign(
-        { email: user.email },
+        { id: user.id },
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: "10s" }
       );
 
       const refreshToken = jwt.sign(
-        { email: user.email },
+        { id: user.id },
         process.env.REFRESH_TOKEN_SECRET,
         { expiresIn: "1d" }
       );

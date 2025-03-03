@@ -33,6 +33,7 @@ export const verifyJWT = (
       console.log(cookies);
       const token = authHeader.split(" ")[1]; // Because format is {Header: Bearer [Token]}
 
+      console.log("Verifying User with token: ", token);
       jwt.verify(
         token,
         process.env.ACCESS_TOKEN_SECRET,
