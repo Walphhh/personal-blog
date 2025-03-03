@@ -10,7 +10,6 @@ export type StatusCode = 409 | 200;
 
 const userServices = () => {
   const axiosInstance = useAxios();
-  const { setUser } = useAuth();
 
   return {
     /**
@@ -30,22 +29,13 @@ const userServices = () => {
     },
 
     /***/
-    createUser: async (newUser: newUser): Promise<StatusCode | undefined> => {
+    userCreate: async (newUser: newUser): Promise<any | undefined> => {
       try {
         const response = await axiosInstance.post("/users/sign-up", newUser);
 
-        if (response.status === 200) {
-          return 200;
-        }
-
-        if (
-          response.status === 409 &&
-          response.data.message === "email already in use"
-        )
-          return 409;
-      } catch (err: any) {
-        console.log(err.response.status);
-        return err.response.status;
+        return response;
+      } catch (err) {
+        return err;
       }
     },
 
@@ -55,7 +45,7 @@ const userServices = () => {
      * @param password - password of the user
      * @returns response from the server
      */
-    authenticateUser: async (
+    userAuthenticate: async (
       email: string,
       password: string
     ): Promise<any | undefined> => {
@@ -65,6 +55,17 @@ const userServices = () => {
           { email: email, password: password },
           { withCredentials: true }
         );
+        return response;
+      } catch (err) {
+        return err;
+      }
+    },
+
+    userLogout: async (): Promise<any | undefined> => {
+      try {
+        const response = await axiosInstance.get("/users/logout", {
+          withCredentials: true,
+        });
         return response;
       } catch (err) {
         return err;
