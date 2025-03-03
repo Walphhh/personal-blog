@@ -6,11 +6,13 @@ import { useNavigate } from "react-router-dom";
 import { Field, Box, Input, Button } from "@chakra-ui/react";
 import { useAlert } from "@/contexts/AlertContext";
 import Fullscreen from "@/pages/Fullscreen";
+import userServices from "@/services/userServices";
 
 const Login = () => {
   const Navigate = useNavigate();
   const { setUser } = useAuth();
   const { setAlert } = useAlert();
+  const { loginUser } = userServices();
 
   const schema = Yup.object().shape({
     email: Yup.string().email().required("Email is required"),
@@ -18,33 +20,24 @@ const Login = () => {
   });
 
   const handleSubmit = async () => {
-    try {
-      const response = await axios.post(
-        "https://localhost:5000/api/users/login",
-        {
-          email: formik.values.email,
-          password: formik.values.password,
-        },
-        {
-          withCredentials: true,
-        }
-      );
+    const response = await loginUser(
+      formik.values.email,
+      formik.values.password
+    );
 
-      if (response.status === 200) {
-        setUser({
-          newID: response.data.id,
-          newRole: response.data.role,
-          newUsername: response.data.username,
-          newAccessToken: response.data.accessToken,
-        });
-        setAlert(true, "success", "Admin Logged In");
-        Navigate("/");
-      }
-    } catch (err) {
-      if (axios.isAxiosError(err) && err.response?.status === 401) {
-        setAlert(true, "error", "Invalid Username or Password");
-      }
-      console.log(err);
+    if (response.status === 200) {
+      setUser({
+        newID: response.data.id,
+        newRole: response.data.role,
+        newUsername: response.data.username,
+        newAccessToken: response.data.accessToken,
+      });
+      setAlert(true, "success", "Admin Logged In");
+      Navigate("/");
+    }
+
+    if (axios.isAxiosError(response) && response.status === 401) {
+      setAlert(true, "error", "Invalid Username or Password");
     }
   };
 
