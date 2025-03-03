@@ -27,7 +27,7 @@ const Navbar = () => {
             </>
           ) : (
             <ChakraLink>
-              <Link to="/login">
+              <Link to="/user/login">
                 <Text>Login</Text>
               </Link>
             </ChakraLink>
