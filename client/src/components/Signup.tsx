@@ -12,19 +12,16 @@ import * as Yup from "yup";
 import Fullscreen from "@/pages/Fullscreen";
 import { newUser } from "@/services/userServices";
 import userServices from "@/services/userServices";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAlert } from "@/contexts/AlertContext";
 
 const Signup = () => {
-  const { createUser, authenticateUser } = userServices();
-  const [error, setError] = useState("");
+  const { userCreate, userAuthenticate } = userServices();
   const Navigate = useNavigate();
   const { setUser } = useAuth();
   const { setAlert } = useAlert();
 
-  useEffect(() => {});
   const initialValues = {
     username: "",
     email: "",
@@ -49,7 +46,7 @@ const Signup = () => {
         password: userDetails.password,
       };
       console.log(newUser);
-      const response = await createUser(newUser);
+      const response = await userCreate(newUser);
 
       console.log(response);
 
@@ -60,7 +57,7 @@ const Signup = () => {
 
       // Response 200 handler
       if (response.status === 200) {
-        const response = await authenticateUser(
+        const response = await userAuthenticate(
           userDetails.email,
           userDetails.password
         );
@@ -99,8 +96,7 @@ const Signup = () => {
                 formik.touched.username && Boolean(formik.errors.username)
               }
               onBlur={formik.handleBlur}
-              minH={20}
-              gap={0}
+              minH="5.5rem"
             >
               <Field.Label>Username</Field.Label>
               <Input
@@ -114,8 +110,7 @@ const Signup = () => {
             <Field.Root
               invalid={formik.touched.email && Boolean(formik.errors.email)}
               onBlur={formik.handleBlur}
-              minH={20}
-              gap={0}
+              minH="5.5rem"
             >
               <Field.Label>Email</Field.Label>
               <Input
@@ -131,8 +126,7 @@ const Signup = () => {
                 formik.touched.password && Boolean(formik.errors.password)
               }
               onBlur={formik.handleBlur}
-              minH={20}
-              gap={0}
+              minH="5.5rem"
             >
               <Field.Label>Password</Field.Label>
               <Input
@@ -150,8 +144,7 @@ const Signup = () => {
                 Boolean(formik.errors.passwordConfirm)
               }
               onBlur={formik.handleBlur}
-              minH={20}
-              gap={0}
+              minH="5.5rem"
             >
               <Field.Label>Confirm Password</Field.Label>
               <Input

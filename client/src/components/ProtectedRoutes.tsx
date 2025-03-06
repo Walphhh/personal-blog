@@ -6,11 +6,11 @@ const ProtectedRoutes = ({ children }: { children: ReactNode }) => {
   const { userState } = useAuth();
   const { role } = userState;
 
-  return role === "admin" ? (
+  return role === "admin" || role === "user" ? (
     <>{children}</>
   ) : (
     <>
-      <Navigate to="/login" replace></Navigate>{" "}
+      <Navigate to="/user/login" replace></Navigate>{" "}
     </>
   );
 };

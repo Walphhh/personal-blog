@@ -19,6 +19,16 @@ const blogServices = () => {
   const axiosInstance = useAxios();
   const { fetchUsername } = userServices();
 
+  // Helper function to extend the blog object with the author's name
+  const extendBlog = async (blog: Blog): Promise<BlogWithAuthorName> => {
+    if (blog.authorUserID) {
+      const authorName = await fetchUsername(blog.authorUserID);
+      return { ...blog, authorName: authorName };
+    } else {
+      return { ...blog, authorName: "Unkown" };
+    }
+  };
+
   // Always declare the promise types with async function in typescript
 
   /**
@@ -32,18 +42,12 @@ const blogServices = () => {
         if (!response.data) {
           return undefined;
         } else {
-          const blogs: Blog[] = response.data;
+          const blogs: Blog[] = response.data.blogs;
           // Fetches usernames and maps it as a key-value pair stored in a new variable
           const updatedBlogs: BlogWithAuthorName[] = await Promise.all(
             blogs.map(async (currentBlog) => {
-              if (currentBlog.authorUserID) {
-                const authorName = await fetchUsername(
-                  currentBlog.authorUserID
-                );
-                return { ...currentBlog, authorName: authorName };
-              } else {
-                return { ...currentBlog, authorName: "Unkown" };
-              }
+              const updatedCurrentBlog = await extendBlog(currentBlog);
+              return updatedCurrentBlog;
             })
           );
           return updatedBlogs;
@@ -58,10 +62,13 @@ const blogServices = () => {
      * Fetches a specific blog from the server
      * @param blogID - the id of the blog to be fetched
      */
-    fetchBlogByID: async (blogID: string): Promise<Blog | undefined> => {
+    fetchBlogByID: async (
+      blogID: string
+    ): Promise<BlogWithAuthorName | undefined> => {
       try {
         const response = await axiosInstance.get(`/blogs/${blogID}`);
-        return response.data as Blog;
+        const updatedBlog = await extendBlog(response.data);
+        return updatedBlog;
       } catch (err) {
         if (axios.isAxiosError(err) && err.response?.status === 401) {
           return {
@@ -70,6 +77,7 @@ const blogServices = () => {
             description: "Unauthorised",
             body: "Unauthorised",
             authorUserID: "Unauthorised",
+            authorName: "Unauthorised",
           };
         }
         if (axios.isAxiosError(err) && err.response?.status === 404) {
@@ -80,6 +88,7 @@ const blogServices = () => {
             description: "Blog Not Found",
             body: "Blog Not Found",
             authorUserID: "Blog Not Found",
+            authorName: "Blog Not Found",
           };
         }
         console.log(err);

@@ -2,8 +2,19 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { Field, Box, Input, Button } from "@chakra-ui/react";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  Text,
+  Center,
+  Field,
+  Box,
+  Input,
+  Button,
+  VStack,
+  Link as ChakraLink,
+  Stack,
+  Separator,
+} from "@chakra-ui/react";
 import { useAlert } from "@/contexts/AlertContext";
 import Fullscreen from "@/pages/Fullscreen";
 import userServices from "@/services/userServices";
@@ -12,7 +23,7 @@ const Login = () => {
   const Navigate = useNavigate();
   const { setUser } = useAuth();
   const { setAlert } = useAlert();
-  const { authenticateUser } = userServices();
+  const { userAuthenticate } = userServices();
 
   const schema = Yup.object().shape({
     email: Yup.string().email().required("Email is required"),
@@ -20,7 +31,7 @@ const Login = () => {
   });
 
   const handleSubmit = async () => {
-    const response = await authenticateUser(
+    const response = await userAuthenticate(
       formik.values.email,
       formik.values.password
     );
@@ -51,40 +62,62 @@ const Login = () => {
   });
 
   return (
-    <Fullscreen>
-      <Box p={8} rounded={16} background="bg.subtle">
-        <form onSubmit={formik.handleSubmit}>
-          <Field.Root
-            invalid={formik.touched.email && Boolean(formik.errors.email)}
-            onBlur={formik.handleBlur}
-          >
-            <Field.Label>Email</Field.Label>
-            <Input
-              name="email"
-              onChange={formik.handleChange}
-              value={formik.values.email}
-              bg="bg.subtle"
-            />
-            <Field.ErrorText>{formik.errors.email}</Field.ErrorText>
-          </Field.Root>
-          <Field.Root
-            invalid={formik.touched.password && Boolean(formik.errors.password)}
-            onBlur={formik.handleBlur}
-          >
-            <Field.Label>Password</Field.Label>
-            <Input
-              name="password"
-              type="password"
-              onChange={formik.handleChange}
-              value={formik.values.password}
-              bg="bg.subtle"
-            />
-            <Field.ErrorText>{formik.errors.password}</Field.ErrorText>
-          </Field.Root>
-          <Button type="submit" mt={6}>
-            Login
-          </Button>
-        </form>
+    <Fullscreen center={true}>
+      <Box p={8} minW={64} rounded={16} background="bg.subtle">
+        <Center mb={4}>
+          <Text>Login</Text>
+        </Center>
+
+        <VStack>
+          <form onSubmit={formik.handleSubmit}>
+            <Field.Root
+              invalid={formik.touched.email && Boolean(formik.errors.email)}
+              onBlur={formik.handleBlur}
+              minH="5.5rem"
+            >
+              <Field.Label>Email</Field.Label>
+              <Input
+                name="email"
+                onChange={formik.handleChange}
+                value={formik.values.email}
+                bg="bg.subtle"
+              />
+              <Field.ErrorText>{formik.errors.email}</Field.ErrorText>
+            </Field.Root>
+            <Field.Root
+              invalid={
+                formik.touched.password && Boolean(formik.errors.password)
+              }
+              onBlur={formik.handleBlur}
+              minH="5.5rem"
+            >
+              <Field.Label>Password</Field.Label>
+              <Input
+                name="password"
+                type="password"
+                onChange={formik.handleChange}
+                value={formik.values.password}
+                bg="bg.subtle"
+              />
+              <Field.ErrorText>{formik.errors.password}</Field.ErrorText>
+            </Field.Root>
+            <Button type="submit" w="full">
+              Login
+            </Button>
+          </form>
+          <Stack>
+            <Separator size="lg" orientation="horizontal" />
+          </Stack>
+
+          <VStack>
+            <Text> No Account?</Text>
+            <ChakraLink>
+              <Link to="/user/sign-up">
+                <Text textEmphasis="ActiveBorder">Ceate One</Text>
+              </Link>
+            </ChakraLink>
+          </VStack>
+        </VStack>
       </Box>
     </Fullscreen>
   );

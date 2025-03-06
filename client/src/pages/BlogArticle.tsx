@@ -1,67 +1,56 @@
 import { VStack, Heading, Text, Button, HStack } from "@chakra-ui/react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Blog } from "@/services/blogServices";
+import { BlogWithAuthorName } from "@/services/blogServices";
 import { useAlert } from "../contexts/AlertContext";
-import ConfirmationDialog from "@/components/ConfirmationDialog";
 import { useAuth } from "@/contexts/AuthContext";
 import blogServices from "@/services/blogServices";
 import Fullscreen from "./Fullscreen";
+import ModifyBlog from "@/components/ModifyBlog";
 
-const BlogArticle = () => {
-  const Navigate = useNavigate();
+interface props {
+  passedBlog?: BlogWithAuthorName;
+}
+const BlogArticle = ({ passedBlog }: props) => {
   const { blogID } = useParams();
-  const [blog, setBlog] = useState<Blog | undefined>(undefined);
-  const { setAlert } = useAlert();
+  const [blog, setBlog] = useState<BlogWithAuthorName>();
   const { userState } = useAuth();
   const { role } = userState;
-  const { fetchBlogByID, deleteBlogByID } = blogServices();
+  const { fetchBlogByID } = blogServices();
+  const [isAuthor, setIsAuthor] = useState<boolean>(false);
 
+  // Something wrong here
   useEffect(() => {
-    if (blogID) {
-      const fetchBlog = async () => {
-        const data = await fetchBlogByID(blogID);
+    const fetchBlog = async () => {
+      let data: BlogWithAuthorName | undefined;
+      if (!passedBlog && blogID !== undefined) {
+        console.log("Fetching blog by ID");
+        data = await fetchBlogByID(blogID);
         setBlog(data);
-      };
-      fetchBlog();
-    }
-  }, [blogID]);
-
-  const deleteBlog = async () => {
-    try {
-      if (blogID) {
-        const isDeleted = await deleteBlogByID(blogID);
-        if (isDeleted) {
-          setAlert(true, "success", "Blog Deleted");
-          Navigate("/");
+      } else {
+        setBlog(passedBlog);
+      }
+      if (data !== undefined) {
+        if (data.authorUserID === userState.id) {
+          setIsAuthor(true);
         }
       }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+    };
+    fetchBlog();
+  }, [blogID]);
 
   return (
     <Fullscreen>
-      <VStack>
-        <Heading>{blog?.title}</Heading>
-        <Text>{blog?.description}</Text>
-        <Text>{blog?.body}</Text>
-        {role === "admin" && (
-          <HStack>
-            <ConfirmationDialog
-              type="edit"
-              buttonStyle="gray"
-              onConfirm={() => {}}
-            />
-            <ConfirmationDialog
-              type="delete"
-              buttonStyle="red"
-              onConfirm={deleteBlog}
-            />
-          </HStack>
-        )}
-      </VStack>
+      {blog !== undefined && blog._id !== undefined && (
+        <VStack>
+          <Heading>{blog.title}</Heading>
+          <Text>{blog.description}</Text>
+          <Text>
+            <div dangerouslySetInnerHTML={{ __html: blog.body }} />
+          </Text>
+          {(role === "admin" || isAuthor) && <ModifyBlog blogID={blog._id} />}
+        </VStack>
+      )}
     </Fullscreen>
   );
 };

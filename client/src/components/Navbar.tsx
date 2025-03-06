@@ -18,7 +18,7 @@ const Navbar = () => {
           <Text>About</Text>
         </HStack>
         <HStack display="flex" justifyContent="flex-end" me={6}>
-          {userState.role === "admin" ? (
+          {userState.role === "admin" || userState.role === "user" ? (
             <>
               <Logout />
               <Link to="/blog/create-blog">
