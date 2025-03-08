@@ -7,11 +7,12 @@ const router: Router = express.Router();
 router
   .route("/")
   .get(blogController.getBlogs) // GET - all Blogs
-  .post(blogController.createBlog); // POST
+  .post(verifyJWT, blogController.createBlog); // POST
 
 router
   .route("/:id")
-  .get(verifyJWT, blogController.getBlogByID) // GET:id - specific blog
-  .delete(blogController.deleteBlogByID); // DELETE:id
+  .get(blogController.getBlogByID) // GET:id - specific blog
+  .delete(verifyJWT, blogController.deleteBlogByID) // DELETE:id
+  .post(blogController.updateBlog);
 
 export default router;
