@@ -1,14 +1,47 @@
 import { Blog } from "../models/blogModel";
 import { Request, Response } from "express";
+import { CustomRequest } from "../middleware/verifyJWT";
+import { lstatSync } from "fs";
 import jwt from "jsonwebtoken";
 
 export const blogController = {
   getBlogs: async (req: Request, res: Response) => {
     try {
-      console.log("Fetching blogs..."); // Debug log
-      const blogs = await Blog.find();
-      console.log("Found blogs"); // Debug log
-      res.json(blogs);
+      // const batchLimit = 10; // limit;
+      // const currentCursor = req.params.cursor; // cursor to point to the next batch of blogs
+
+      // let query = {};
+
+      // if (currentCursor) {
+      //   const [timestamp, id] = currentCursor.split("|");
+
+      //   query = {
+      //     $or: [
+      //       { createdAt: { $lt: new Date(timestamp) } },
+      //       { createdAt: new Date(timestamp), _id: { $lt: id } },
+      //     ],
+      //   };
+      // }
+
+      // console.log("Fetching blogs..."); // Debug log
+      // const blogs = await Blog.find()
+      //   .sort({ createdAt: -1, _id: -1 })
+      //   .limit(batchLimit + 1);
+      // console.log("Found blogs"); // Debug log
+
+      // const hasNextPage = blogs.length > batchLimit;
+      // const slicedBlogs = blogs.slice(0, batchLimit);
+      // const lastBlog = slicedBlogs[slicedBlogs.length - 1];
+
+      // const nextCursor = hasNextPage
+      //   ? `${lastBlog.createdAt.toISOString()}|${
+      //       slicedBlogs[slicedBlogs.length - 1]._id
+      //     }`
+      //   : null;
+
+      const blogs = await Blog.find().sort({ createdAt: -1, _id: -1 });
+
+      res.json({ blogs: blogs });
     } catch (error) {
       console.error("Error fetching blogs:", error); // Debug log
       res.status(500).json({ error: error });
@@ -34,10 +67,19 @@ export const blogController = {
     }
   },
 
-  deleteBlogByID: async (req: Request, res: Response) => {
+  deleteBlogByID: async (req: CustomRequest, res: Response) => {
     try {
-      const deleteBlog = await Blog.findByIdAndDelete(req.params.id);
-      res.status(200).json({ message: "Blog deleted successfully" });
+      const userID = req.userID;
+      const blog = await Blog.findByIdAndDelete(req.params.id);
+
+      if (blog?.authorUserID !== userID) {
+        res.status(401).json({
+          message: "You are unauthorised to proceed with this action",
+        });
+        return;
+      } else {
+        res.status(200).json({ message: "Blog deleted successfully" });
+      }
     } catch (err) {
       console.log(err);
     }
@@ -54,6 +96,22 @@ export const blogController = {
       });
       const savedBlog = await newBlog.save(); // saving the new Blog
       res.status(201).json(savedBlog); // sending back the doc
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+  updateBlog: async (req: Request, res: Response) => {
+    try {
+      console.log(req.body);
+      console.log("Updating Blog with ID: ", req.body._id);
+      const updatedBlog = await Blog.findByIdAndUpdate(req.body._id, {
+        title: req.body.title,
+        description: req.body.description,
+        body: req.body.body,
+      });
+      console.log(updatedBlog);
+      res.status(200).json({ message: "Blog Updated" });
     } catch (err) {
       console.log(err);
     }
