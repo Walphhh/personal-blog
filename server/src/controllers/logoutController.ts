@@ -25,3 +25,4 @@ export const handleLogout = async (req: Request, res: Response) => {
     .clearCookie("jwt", { httpOnly: true, secure: true, sameSite: "lax" })
     .sendStatus(200);
 };
+ 
