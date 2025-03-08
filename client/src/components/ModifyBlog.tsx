@@ -3,22 +3,24 @@ import blogServices from "@/services/blogServices";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAlert } from "../contexts/AlertContext";
 import { useNavigate } from "react-router-dom";
-import { HStack } from "@chakra-ui/react";
+import { Button, HStack } from "@chakra-ui/react";
 import ConfirmationDialog from "./ConfirmationDialog";
+import BlogForm from "./BlogForm";
+import { Blog } from "@/services/blogServices";
 
 interface props {
-  blogID: string;
+  blog: Blog;
+  onEditClick: () => void;
 }
-const ModifyBlog = ({ blogID }: props) => {
+const ModifyBlog = ({ blog, onEditClick }: props) => {
   const { deleteBlogByID } = blogServices();
-  const { userState } = useAuth();
   const { setAlert } = useAlert();
   const Navigate = useNavigate();
 
   const deleteBlog = async () => {
     try {
-      if (blogID) {
-        const isDeleted = await deleteBlogByID(blogID);
+      if (blog._id) {
+        const isDeleted = await deleteBlogByID(blog._id);
         if (isDeleted) {
           setAlert(true, "success", "Blog Deleted");
           Navigate("/");
@@ -31,7 +33,7 @@ const ModifyBlog = ({ blogID }: props) => {
 
   return (
     <HStack>
-      <ConfirmationDialog type="edit" buttonStyle="gray" onConfirm={() => {}} />
+      <Button onClick={onEditClick}>Edit</Button>
       <ConfirmationDialog
         type="delete"
         buttonStyle="red"
