@@ -5,9 +5,10 @@ import DOMPurify from "dompurify";
 
 interface TestProps {
   setData: (data: string) => void;
+  initialContent: string;
 }
-const Test = ({ setData }: TestProps) => {
-  const [content, setContent] = useState("");
+const Test = ({ setData, initialContent }: TestProps) => {
+  const [content, setContent] = useState(initialContent);
 
   useEffect(() => {
     const post = () => {

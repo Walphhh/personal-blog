@@ -83,7 +83,7 @@ const Signup = () => {
   });
 
   return (
-    <Fullscreen>
+    <Fullscreen center={true}>
       <Box p={8} minW={64} rounded={16} background="bg.subtle">
         <Center mb={4}>
           <Text>Sign Up</Text>

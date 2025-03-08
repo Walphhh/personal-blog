@@ -106,14 +106,18 @@ const Login = () => {
             </Button>
           </form>
           <Stack>
-            <Separator size="lg" orientation="horizontal" />
+            <Separator
+              orientation={{ base: "vertical", sm: "horizontal" }}
+              size="lg"
+              minW="100%"
+            />
           </Stack>
 
           <VStack>
             <Text> No Account?</Text>
             <ChakraLink>
               <Link to="/user/sign-up">
-                <Text textEmphasis="ActiveBorder">Ceate One</Text>
+                <Text textDecoration="underline">Ceate One</Text>
               </Link>
             </ChakraLink>
           </VStack>
