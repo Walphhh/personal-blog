@@ -14,7 +14,8 @@ type AlertMessage =
   | "Admin Logged In"
   | "Logged Out Successfully"
   | "Invalid Username or Password"
-  | "Account Created";
+  | "Account Created"
+  | "Blog Updated";
 
 // Shape of the Context
 // Basically everything that you can access within the provider
