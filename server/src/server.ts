@@ -9,6 +9,7 @@ import fs from "fs";
 import path from "path";
 
 import cookieParser = require("cookie-parser");
+import { initialiseData } from "./middleware/initaliseData";
 
 const app = express();
 
