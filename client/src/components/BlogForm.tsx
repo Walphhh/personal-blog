@@ -53,7 +53,6 @@ const BlogForm = ({ initialValues, handleSubmit }: props) => {
 
   const handleContentData = (content: string) => {
     setBody(content);
-    console.log(content);
   };
 
   return (
