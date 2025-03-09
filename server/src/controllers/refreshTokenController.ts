@@ -14,8 +14,10 @@ interface DecodedToken {
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-// Returns a new access token upon request
-export const handleRefreshToken = (req: Request, res: Response) => {
+/**
+ * @param req.cookie -
+ */
+export const handleRefreshToken = (req: CustomRequest, res: Response) => {
   const cookies = req.cookies.jwt;
   console.log("Cookie Recieved: ", cookies);
 
@@ -40,11 +42,14 @@ export const handleRefreshToken = (req: Request, res: Response) => {
           res.status(403).json({ message: "Invalid Refresh TOken" });
           return;
         }
+
         const accessToken = jwt.sign(
-          { username: decoded.username },
+          { id: decoded.id },
           process.env.ACCESS_TOKEN_SECRET,
           { expiresIn: "15s" }
         );
+
+        // sending back the new access token
         console.log("New accessToken sent: ", accessToken);
         res.json({ accessToken, message: "Refresh Successful" });
       }

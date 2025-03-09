@@ -1,6 +1,6 @@
 import { Blog } from "../models/blogModel";
 import { Request, Response } from "express";
-import { CustomRequest } from "../middleware/verifyJWT";
+import { CustomRequest } from "../types/types";
 import { lstatSync } from "fs";
 import jwt from "jsonwebtoken";
 
@@ -69,17 +69,9 @@ export const blogController = {
 
   deleteBlogByID: async (req: CustomRequest, res: Response) => {
     try {
-      const userID = req.userID;
-      const blog = await Blog.findByIdAndDelete(req.params.id);
+      await Blog.findByIdAndDelete(req.params.id);
 
-      if (blog?.authorUserID !== userID) {
-        res.status(401).json({
-          message: "You are unauthorised to proceed with this action",
-        });
-        return;
-      } else {
-        res.status(200).json({ message: "Blog deleted successfully" });
-      }
+      res.status(200).json({ message: "Blog deleted successfully" });
     } catch (err) {
       console.log(err);
     }
@@ -105,7 +97,7 @@ export const blogController = {
     try {
       console.log(req.body);
       console.log("Updating Blog with ID: ", req.body._id);
-      const updatedBlog = await Blog.findByIdAndUpdate(req.body._id, {
+      const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, {
         title: req.body.title,
         description: req.body.description,
         body: req.body.body,

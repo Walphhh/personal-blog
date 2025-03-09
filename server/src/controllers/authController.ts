@@ -14,13 +14,14 @@ export const handleLogin = async (req: Request, res: Response) => {
 
   try {
     console.log("Received login request", email); // Debug log
-    const user = await User.findOne({ email }); //
+    const user = await User.findOne({ email }); // Finding the user
 
     if (!user) {
       res.status(401).json({ message: "Invalid Email" });
       return;
     }
 
+    // if a user is found, checking if the password matches
     if (user) {
       const passwordMatch = await bcrypt.compare(password, user.password);
 
@@ -29,10 +30,11 @@ export const handleLogin = async (req: Request, res: Response) => {
         return;
       }
 
+      // signing the JWT tokens
       const accessToken = jwt.sign(
         { id: user.id },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: "60s" }
+        { expiresIn: "10s" }
       );
 
       const refreshToken = jwt.sign(
