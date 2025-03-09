@@ -1,5 +1,5 @@
 import BlogPreviewCard from "@/components/BlogPreviewCard";
-import { VStack } from "@chakra-ui/react";
+import { VStack, Text, Stack } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import blogServices from "@/services/blogServices";
 import { useAuth } from "@/contexts/AuthContext";
@@ -21,8 +21,12 @@ const HomePage = () => {
 
   return (
     <VStack pt="10" spaceY="10">
-      {(userState.role === "admin" || userState.role === "user") &&
-        `Welcome ${userState.username}`}
+      {userState.role === "admin" || userState.role === "user" ? (
+        <Stack bgColor="bg.subtle" rounded={16} p={2} ps={4} pe={4}>
+          <Text>{`Welcome ${userState.username}`}</Text>
+        </Stack>
+      ) : null}
+
       <VStack spaceY="2">
         {blogs.map((blog) => {
           return (

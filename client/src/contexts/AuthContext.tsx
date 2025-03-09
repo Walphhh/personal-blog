@@ -1,4 +1,12 @@
-import { ReactNode, useContext, createContext, useState } from "react";
+import useAxios from "@/services/axiosInstance";
+import axios, { AxiosError } from "axios";
+import {
+  ReactNode,
+  useContext,
+  createContext,
+  useState,
+  useEffect,
+} from "react";
 
 type roleType = "admin" | "user" | "viewer";
 type accessTokenType = string;
@@ -33,6 +41,7 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const axiosInstance = useAxios();
   const [userState, setUserState] = useState<UserStateType>({
     id: "",
     username: "",
@@ -54,6 +63,37 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }));
   };
 
+  // Checks if a user was previously logged in and reauthenticates user
+  useEffect(() => {
+    if (userState.id === "") {
+      const refreshUser = async () => {
+        try {
+          const res = await axiosInstance.post(
+            "https://localhost:5000/api/refresh/user",
+            {},
+            { withCredentials: true }
+          );
+          if (res.status === 401) return;
+          if (res.status === 200) {
+            console.log("user found and refreshing user details");
+            setUser({
+              newID: res.data.id,
+              newUsername: res.data.username,
+              newRole: res.data.role,
+            });
+          }
+        } catch (err) {
+          if (axios.isAxiosError(err) && err.status === 401) {
+            return;
+          }
+          console.log(err);
+        }
+      };
+      refreshUser();
+    }
+  }, []);
+
+  console.log(userState);
   return (
     <AuthContext.Provider
       value={{

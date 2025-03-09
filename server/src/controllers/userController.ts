@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { User } from "../models/userModel";
 import { error } from "console";
+import { CustomRequest } from "../types/types";
 
 const bcrypt = require("bcrypt");
 
@@ -24,6 +25,25 @@ export const userController = {
     } catch (err) {
       res.status(401);
       return;
+    }
+  },
+
+  /**
+   * @return user details
+   */
+  findUser: async (req: CustomRequest, res: Response) => {
+    try {
+      const user = await User.findById(req.userID);
+
+      if (user) {
+        console.log("User found");
+        res
+          .status(200)
+          .json({ id: user.id, username: user.username, role: user.role });
+      }
+      res.status(404).json({ message: "user not found" });
+    } catch (err) {
+      console.log(err);
     }
   },
 

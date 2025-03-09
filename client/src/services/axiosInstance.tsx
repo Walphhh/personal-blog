@@ -14,13 +14,14 @@ const useAxios = () => {
 
   useEffect(() => {
     latestToken.current = userState.accessToken;
+    console.log(userState);
   }, [userState.accessToken]);
 
   useEffect(() => {
     // Request Interceptor
     const requestInterceptor = axiosInstance.interceptors.request.use(
       (config) => {
-        if (userState.accessToken.length > 0) {
+        if (latestToken.current) {
           config.headers.Authorization = `Bearer ${latestToken.current}`;
         }
         return config;
@@ -38,6 +39,7 @@ const useAxios = () => {
         if (err.response.status === 401 && !originalRequest._retry) {
           originalRequest._retry = true;
           try {
+            console.log("attempting refresh...");
             const res = await axiosInstance.post(
               "/refresh",
               {},

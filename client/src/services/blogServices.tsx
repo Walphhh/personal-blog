@@ -3,12 +3,14 @@ import useAxios from "./axiosInstance";
 import userServices from "./userServices";
 
 // This file includes all the blog realated APIs as well as the the Blog Interface
-export interface Blog {
-  _id?: string;
+export interface NewBlog {
   title: string;
   description: string;
   body: string;
   authorUserID: string;
+}
+export interface Blog extends NewBlog {
+  _id: string;
 }
 
 export interface BlogWithAuthorName extends Blog {
@@ -102,7 +104,25 @@ const blogServices = () => {
      */
     deleteBlogByID: async (blogID: string): Promise<Boolean | undefined> => {
       try {
-        return await axiosInstance.delete(`/blogs/${blogID}`);
+        const res = await axiosInstance.delete(`/blogs/${blogID}`);
+        if (res.status === 200) {
+          return true;
+        }
+        return false;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    /**
+     * Updates a blog post.
+     * @param blog - The new blog data.
+     * @returns A promise that resolves to the posted blog or undefined.
+     */
+    updateBlog: async (blog: Blog): Promise<Boolean | undefined> => {
+      try {
+        console.log(blog);
+        return await axiosInstance.post(`/blogs/${blog._id}`, blog);
       } catch (err) {
         console.log(err);
       }
@@ -113,7 +133,7 @@ const blogServices = () => {
      * @param newBlog - The blog to be posted.
      * @returns A promise that resolves to the posted blog or undefined.
      */
-    postBlog: async (newBlog: Blog): Promise<Boolean | undefined> => {
+    postBlog: async (newBlog: NewBlog): Promise<Boolean | undefined> => {
       try {
         return await axiosInstance.post(`/blogs`, newBlog);
       } catch (err) {

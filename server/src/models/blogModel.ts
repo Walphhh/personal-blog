@@ -6,6 +6,8 @@ export interface BlogI extends Document {
   description: string;
   body: string;
   authorUserID: string; // Primary key, refers to the userID of the author
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 // Schema Definition
