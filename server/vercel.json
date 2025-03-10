@@ -2,25 +2,18 @@
   "version": 2,
   "builds": [
     {
-      "src": "package.json",
-      "use": "@vercel/ncc",
-      "config": {
-        "targets": ["dist"]
-      }
-    },
-    {
-      "src": "dist/api/index.js",
+      "src": "dist/server.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/dist/api/index.js"
+      "dest": "/dist/server.js"
     },
     {
       "src": "/(.*)",
-      "dest": "/dist/api/index.js"
+      "dest": "/dist/server.js"
     }
   ]
 }
