@@ -1,7 +1,7 @@
-import { Button, Input, Field, Textarea, Box, Stack } from "@chakra-ui/react";
+import { Button, Input, Field, Box } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { NewBlog, Blog } from "@/services/blogServices";
+import { NewBlog } from "@/services/blogServices";
 import TextEditor from "./TextEditor";
 import { useState } from "react";
 import Fullscreen from "@/pages/Fullscreen";

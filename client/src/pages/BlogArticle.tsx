@@ -1,13 +1,5 @@
-import {
-  VStack,
-  Stack,
-  Heading,
-  Text,
-  Button,
-  HStack,
-  Separator,
-} from "@chakra-ui/react";
-import { useParams, useNavigate } from "react-router-dom";
+import { Stack, Heading, Text, Button, Separator } from "@chakra-ui/react";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { BlogWithAuthorName } from "@/services/blogServices";
 import { useAuth } from "@/contexts/AuthContext";

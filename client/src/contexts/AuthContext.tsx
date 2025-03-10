@@ -1,5 +1,4 @@
-import useAxios from "@/services/axiosInstance";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import {
   ReactNode,
   useContext,
