@@ -7,9 +7,8 @@ import refreshRoute from "./routes/refreshRoute";
 import https from "https";
 import fs from "fs";
 import path from "path";
-
 import cookieParser = require("cookie-parser");
-import { initialiseData } from "./middleware/initaliseData";
+require("dotenv").config();
 
 const app = express();
 
@@ -17,10 +16,10 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "https://localhost:5173", // ✅ Must be a specific origin, not "*"
-    credentials: true, // ✅ Allows cookies to be sent
-    methods: ["GET", "POST", "PUT", "DELETE"], // ✅ Allowed methods
-    allowedHeaders: ["Content-Type", "Authorization", "Accept"], // ✅ Allowed headers
+    origin: "https://localhost:5173",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization", "Accept"],
   })
 );
 
@@ -33,14 +32,21 @@ app.use("/api/refresh", refreshRoute);
 app.use("/api/users", userRoutes);
 app.use("/api/blogs", blogRoutes);
 
-// Always add IP and PORT
-const DB = "mongodb://127.0.0.1:27017/personal-blog"; // local server momentarily, needs to be switched to an Atlas server for deployment
-const port = process.env.PORT || 5000;
+// setting the variables
+const currentEnvironment = process.env.ENVIRONMENT;
+
+const DB_URL =
+  currentEnvironment === "development"
+    ? (process.env.DB_URL_DEV as string)
+    : (process.env.DB_URL_PROD as string); // local server momentarily, needs to be switched to an Atlas server for deployment
+const port = process.env.PORT;
+
+console.log("Running on ", currentEnvironment);
 
 mongoose
-  .connect(DB)
+  .connect(DB_URL)
   .then(() => {
-    console.log("Connected to Database");
+    console.log(`Connected to ${currentEnvironment} Database`);
     start_sslServer();
   })
   .catch((err) => {
