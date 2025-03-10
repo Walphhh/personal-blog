@@ -18,7 +18,7 @@
     "typescript": "^5.7.3"
   },
   "scripts": {
-    "start": "node ./dist/server.js",
+    "start": "ts-node src/server.ts",
     "dev": "nodemon --exec ts-node src/server.ts",
     "build": "tsc",
     "vercel-build": "echo hello"
