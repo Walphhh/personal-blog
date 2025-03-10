@@ -43,7 +43,7 @@ const DB_URL =
   currentEnvironment === "development"
     ? (process.env.DB_URL_DEV as string)
     : (process.env.DB_URL_PROD as string); // local server momentarily, needs to be switched to an Atlas server for deployment
-const port = process.env.PORT;
+const port = process.env.PORT || 5000;
 
 mongoose
   .connect(DB_URL)
