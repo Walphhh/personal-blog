@@ -1,4 +1,5 @@
 import BlogPreviewCard from "@/components/BlogPreviewCard";
+import Fullscreen from "./Fullscreen";
 import { VStack, Text, Stack } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import blogServices from "@/services/blogServices";
@@ -20,24 +21,26 @@ const HomePage = () => {
   }, []);
 
   return (
-    <VStack pt="10" spaceY="10">
-      {userState.role === "admin" || userState.role === "user" ? (
-        <Stack bgColor="bg.subtle" rounded={16} p={2} ps={4} pe={4}>
-          <Text>{`Welcome ${userState.username}`}</Text>
-        </Stack>
-      ) : null}
+    <Fullscreen>
+      <VStack pt="10" spaceY="10">
+        {userState.role === "admin" || userState.role === "user" ? (
+          <Stack bgColor="bg.subtle" rounded={16} p={2} ps={4} pe={4}>
+            <Text>{`Welcome ${userState.username}`}</Text>
+          </Stack>
+        ) : null}
 
-      <VStack spaceY="2">
-        {blogs.map((blog) => {
-          return (
-            <>
-              {/* Only runs if a blog exists */}
-              <BlogPreviewCard key={blog._id} Blog={blog} />
-            </>
-          );
-        })}
+        <VStack spaceY="2">
+          {blogs.map((blog) => {
+            return (
+              <>
+                {/* Only runs if a blog exists */}
+                <BlogPreviewCard key={blog._id} Blog={blog} />
+              </>
+            );
+          })}
+        </VStack>
       </VStack>
-    </VStack>
+    </Fullscreen>
   );
 };
 
