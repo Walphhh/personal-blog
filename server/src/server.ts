@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "https://localhost:5173",
+    origin: "http://localhost:5173",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization", "Accept"],
@@ -33,7 +33,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/blogs", blogRoutes);
 
 // setting the variables
-const currentEnvironment = process.env.ENVIRONMENT;
+const currentEnvironment = process.env.ENV_TYPE;
 
 const DB_URL =
   currentEnvironment === "development"
@@ -41,13 +41,11 @@ const DB_URL =
     : (process.env.DB_URL_PROD as string); // local server momentarily, needs to be switched to an Atlas server for deployment
 const port = process.env.PORT;
 
-console.log("Running on ", currentEnvironment);
-
 mongoose
   .connect(DB_URL)
   .then(() => {
-    console.log(`Connected to ${currentEnvironment} Database`);
-    start_sslServer();
+    console.log(`Connected to ${currentEnvironment} Atlas Database`);
+    startServer();
   })
   .catch((err) => {
     console.log("Connection Error: ", err);
@@ -61,9 +59,10 @@ const start_sslServer = () => {
 };
 const startServer = () => {
   app.listen(port, () => {
-    console.log("Running server on port ", port);
+    console.log(`Running ${currentEnvironment} server on port ${port}`);
   });
 };
+
 const sslServer = https.createServer(
   {
     key: fs.readFileSync(path.join(__dirname, "..", "certificate", "key.pem")),

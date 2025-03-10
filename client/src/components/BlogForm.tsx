@@ -14,7 +14,6 @@ interface props {
 // The Form uses Formik to handle form submission and Yup for schema validation
 const BlogForm = ({ initialValues, handleSubmit }: props) => {
   const [body, setBody] = useState(initialValues.body);
-  console.log(initialValues);
 
   // Schema for validation
   const schema = Yup.object().shape({

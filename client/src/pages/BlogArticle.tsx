@@ -37,7 +37,6 @@ const BlogArticle = () => {
             setIsAuthor(true);
           }
         }
-        console.log(data);
       }
     };
     fetchBlog();

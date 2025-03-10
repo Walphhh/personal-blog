@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, CookieOptions } from "express";
 import { User } from "../models/userModel";
 
 const jwt = require("jsonwebtoken");
@@ -7,6 +7,18 @@ require("dotenv").config();
 
 export const handleLogin = async (req: Request, res: Response) => {
   const { email, password } = req.body;
+  const currentEnv = process.env.ENV_TYPE;
+  const devCookieOptions: CookieOptions = {
+    sameSite: "lax" as "lax",
+    secure: true,
+    maxAge: 24 * 60 * 60 * 1000,
+    httpOnly: false,
+    path: "/",
+  };
+  const cookieOptions =
+    currentEnv === "development"
+      ? devCookieOptions
+      : { ...devCookieOptions, sameSite: "strict" as "strict", secure: true };
 
   // to be replaced with actual JWT
   if (!req.body.email)
@@ -43,13 +55,7 @@ export const handleLogin = async (req: Request, res: Response) => {
         { expiresIn: "1d" }
       );
 
-      res.cookie("jwt", refreshToken, {
-        httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000,
-        sameSite: "lax", // set to not lax in prod
-        secure: true, // set to true in prod
-        path: "/",
-      });
+      res.cookie("jwt", refreshToken, cookieOptions);
 
       const updatedUser = await User.findOneAndUpdate(
         { email: user.email }, // finding the user

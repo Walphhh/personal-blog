@@ -8,14 +8,14 @@ import mkcert from "vite-plugin-mkcert";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tsconfigPaths()],
-  server: {
-    https: {
-      key: fs.readFileSync(
-        path.resolve(__dirname, "..", "server", "certificate", "key.pem")
-      ),
-      cert: fs.readFileSync(
-        path.resolve(__dirname, "..", "server", "certificate", "cert.pem")
-      ),
-    },
-  },
+  // server: {
+  //   https: {
+  //     key: fs.readFileSync(
+  //       path.resolve(__dirname, "..", "server", "certificate", "key.pem")
+  //     ),
+  //     cert: fs.readFileSync(
+  //       path.resolve(__dirname, "..", "server", "certificate", "cert.pem")
+  //     ),
+  //   },
+  // },
 });

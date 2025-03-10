@@ -40,6 +40,7 @@ export const userController = {
         res
           .status(200)
           .json({ id: user.id, username: user.username, role: user.role });
+        return;
       }
       res.status(404).json({ message: "user not found" });
     } catch (err) {
