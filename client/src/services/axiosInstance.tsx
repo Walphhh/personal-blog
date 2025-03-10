@@ -2,10 +2,8 @@ import axios from "axios";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useRef } from "react";
 
-const API_BaseURL = "https://localhost:5000/api";
-
 const axiosInstance = axios.create({
-  baseURL: API_BaseURL,
+  baseURL: import.meta.env.VITE_API_URL,
 });
 
 const useAxios = () => {
@@ -14,7 +12,6 @@ const useAxios = () => {
 
   useEffect(() => {
     latestToken.current = userState.accessToken;
-    console.log(userState);
   }, [userState.accessToken]);
 
   useEffect(() => {
