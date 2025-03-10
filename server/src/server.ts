@@ -8,7 +8,8 @@ import refreshRoute from "./routes/refreshRoute";
 import https from "https";
 import fs from "fs";
 import path from "path";
-import cookieParser = require("cookie-parser");
+import cookieParser from "cookie-parser";
+
 require("dotenv").config();
 
 const app = express();

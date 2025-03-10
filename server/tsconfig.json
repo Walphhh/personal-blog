@@ -3,13 +3,12 @@
     "target": "ES6",
     "module": "commonjs",
     "outDir": "./dist",
-    "rootDir": "./src",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node"
   },
-  "include": ["./src/**/*"],
+  "include": ["./api/*.ts", "./src/**/*"],
   "exclude": ["node_modules"]
 }
