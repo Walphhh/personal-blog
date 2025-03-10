@@ -72,3 +72,5 @@ const sslServer = https.createServer(
   },
   app
 );
+
+export default app;
