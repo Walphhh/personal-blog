@@ -32,7 +32,10 @@ const userServices = () => {
     /***/
     userCreate: async (newUser: newUser): Promise<any | undefined> => {
       try {
-        const response = await axiosInstance.post("/users/sign-up", newUser);
+        const response = await axios.post(
+          "http://localhost:5000/api/users/sign-up",
+          newUser
+        );
 
         return response;
       } catch (err) {

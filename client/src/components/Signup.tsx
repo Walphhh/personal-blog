@@ -32,7 +32,13 @@ const Signup = () => {
   const schema = Yup.object().shape({
     username: Yup.string().required("Username is required"),
     email: Yup.string().email("Invalid email").required("Email is required"),
-    password: Yup.string().required("Password is required"),
+    password: Yup.string()
+      .required("Password is required")
+      .min(8, "Password must be at least 8 characters")
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+        "Please include letters, numbers, and symbols."
+      ),
     passwordConfirm: Yup.string()
       .oneOf([Yup.ref("password")], "Passwords must match")
       .required("Passwords must match"),
@@ -84,7 +90,7 @@ const Signup = () => {
 
   return (
     <Fullscreen center={true}>
-      <Box p={8} minW={64} rounded={16} background="bg.subtle">
+      <Box p={8} w="20rem" rounded={16} background="bg.subtle">
         <Center mb={4}>
           <Text>Sign Up</Text>
         </Center>
