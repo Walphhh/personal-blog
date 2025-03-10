@@ -1,3 +1,4 @@
+import { Request, Response } from "express";
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
@@ -28,6 +29,9 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get("/", (req: Request, res: Response) => {
+  res.json({ message: "Welcome :3" });
+});
 app.use("/api/refresh", refreshRoute);
 app.use("/api/users", userRoutes);
 app.use("/api/blogs", blogRoutes);
