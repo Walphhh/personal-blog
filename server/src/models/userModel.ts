@@ -16,4 +16,4 @@ const userSchema = new mongoose.Schema<UserI>({
   refreshToken: { type: String, required: false },
 });
 
-export const User = mongoose.model<UserI>("User", userSchema);
+export const User = mongoose.model<UserI>("Users", userSchema);
