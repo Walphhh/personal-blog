@@ -41,7 +41,6 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const axiosInstance = useAxios();
   const [userState, setUserState] = useState<UserStateType>({
     id: "",
     username: "",
@@ -68,8 +67,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (userState.id === "") {
       const refreshUser = async () => {
         try {
-          const res = await axiosInstance.post(
-            "/refresh/user",
+          const res = await axios.post(
+            "http://localhost:5000/api/refresh/user",
             {},
             { withCredentials: true }
           );

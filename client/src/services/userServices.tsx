@@ -1,4 +1,5 @@
 import useAxios from "./axiosInstance";
+import axios from "axios";
 import { useAuth } from "@/contexts/AuthContext";
 export interface newUser {
   username: string;
@@ -50,8 +51,9 @@ const userServices = () => {
       password: string
     ): Promise<any | undefined> => {
       try {
-        const response = await axiosInstance.post(
-          "/users/login",
+        // We do not use the axiosInstance because we only want to run it once
+        const response = await axios.post(
+          "http://localhost:5000/api/users/login",
           { email: email, password: password },
           { withCredentials: true }
         );
