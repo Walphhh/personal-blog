@@ -4,7 +4,6 @@ import BlogArticle from "./pages/BlogArticle";
 import Layout from "./pages/Layout";
 import CreateBlogForm from "./components/CreateBlogForm";
 import ProtectedRoutes from "./components/ProtectedRoutes";
-import TestAPI from "./components/test/TestAPI";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 
@@ -15,7 +14,6 @@ const routes = () => {
       element: <Layout />,
       children: [
         { path: "/", element: <HomePage /> },
-        { path: "/test", element: <TestAPI /> },
         {
           path: "blog",
           children: [
