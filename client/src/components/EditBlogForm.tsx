@@ -1,5 +1,5 @@
 import BlogForm from "./BlogForm";
-import { useAuth } from "@/contexts/AuthContext";
+
 import { Blog, NewBlog } from "@/services/blogServices";
 import blogServices from "@/services/blogServices";
 import { useAlert } from "@/contexts/AlertContext";
@@ -9,8 +9,7 @@ interface props {
   blog: Blog;
   blogID: string;
 }
-const EditBlogForm = ({ blog, blogID }: props) => {
-  const { userState } = useAuth();
+const EditBlogForm = ({ blog }: props) => {
   const { updateBlog } = blogServices();
   const { setAlert } = useAlert();
   const Navigate = useNavigate();

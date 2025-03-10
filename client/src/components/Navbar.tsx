@@ -1,4 +1,4 @@
-import { Box, Flex, HStack, Text, Link as ChakraLink } from "@chakra-ui/react";
+import { Box, HStack, Text, Link as ChakraLink } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { useAuth } from "@/contexts/AuthContext";
