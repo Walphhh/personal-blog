@@ -1,6 +1,5 @@
 import useAxios from "./axiosInstance";
 import axios from "axios";
-import { useAuth } from "@/contexts/AuthContext";
 export interface newUser {
   username: string;
   email: string;
@@ -10,6 +9,7 @@ export interface newUser {
 export type StatusCode = 409 | 200;
 
 const userServices = () => {
+  const API_BaseURL = import.meta.env.VITE_API_URL;
   const axiosInstance = useAxios();
 
   return {
@@ -33,7 +33,7 @@ const userServices = () => {
     userCreate: async (newUser: newUser): Promise<any | undefined> => {
       try {
         const response = await axios.post(
-          "http://localhost:5000/api/users/sign-up",
+          `${API_BaseURL}/users/sign-up`,
           newUser
         );
 
@@ -56,7 +56,7 @@ const userServices = () => {
       try {
         // We do not use the axiosInstance because we only want to run it once
         const response = await axios.post(
-          "http://localhost:5000/api/users/login",
+          `${API_BaseURL}/users/login`,
           { email: email, password: password },
           { withCredentials: true }
         );
