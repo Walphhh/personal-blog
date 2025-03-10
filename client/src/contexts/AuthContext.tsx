@@ -69,13 +69,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const refreshUser = async () => {
         try {
           const res = await axiosInstance.post(
-            "https://localhost:5000/api/refresh/user",
+            "/refresh/user",
             {},
             { withCredentials: true }
           );
           if (res.status === 401) return;
           if (res.status === 200) {
-            console.log("user found and refreshing user details");
             setUser({
               newID: res.data.id,
               newUsername: res.data.username,
@@ -93,7 +92,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  console.log(userState);
   return (
     <AuthContext.Provider
       value={{
