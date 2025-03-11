@@ -69,7 +69,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const refreshUser = async () => {
         try {
           const res = await axios.post(
-            `${baseURL}refresh/user`,
+            `${baseURL}/refresh/user`,
             {},
             { withCredentials: true }
           );

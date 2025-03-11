@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 export const baseURL =
   import.meta.env.VITE_API_ENV === "development"
     ? "http://localhost:5000/api"
-    : "be-personal-blog.vercel.app";
+    : "https://be-personal-blog.vercel.app/api";
 
 const axiosInstance = axios.create({
   baseURL: baseURL,
