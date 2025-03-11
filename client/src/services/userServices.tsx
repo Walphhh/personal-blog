@@ -1,4 +1,4 @@
-import useAxios from "./axiosInstance";
+import useAxios, { baseURL } from "./axiosInstance";
 import axios from "axios";
 export interface newUser {
   username: string;
@@ -9,7 +9,7 @@ export interface newUser {
 export type StatusCode = 409 | 200;
 
 const userServices = () => {
-  const API_BaseURL = import.meta.env.VITE_API_URL;
+  const API_BaseURL = baseURL;
   const axiosInstance = useAxios();
 
   return {

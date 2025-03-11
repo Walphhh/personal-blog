@@ -1,3 +1,4 @@
+import { baseURL as mainURL } from "@/services/axiosInstance";
 import axios from "axios";
 import {
   ReactNode,
@@ -60,7 +61,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       accessToken: newAccessToken ? newAccessToken : prev.accessToken,
     }));
   };
-  const baseURL = import.meta.env.VITE_API_URL;
+  const baseURL = mainURL;
 
   // Checks if a user was previously logged in and reauthenticates user
   useEffect(() => {
