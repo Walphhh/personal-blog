@@ -60,6 +60,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       accessToken: newAccessToken ? newAccessToken : prev.accessToken,
     }));
   };
+  const baseURL = import.meta.env.VITE_API_URL;
 
   // Checks if a user was previously logged in and reauthenticates user
   useEffect(() => {
@@ -67,7 +68,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const refreshUser = async () => {
         try {
           const res = await axios.post(
-            "http://localhost:5000/api/refresh/user",
+            `${baseURL}refresh/user`,
             {},
             { withCredentials: true }
           );
